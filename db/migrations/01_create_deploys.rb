@@ -28,7 +28,7 @@ Sequel.migration do
     create_table(:steps) do
       primary_key :id
       Integer :deploy_id, :null=>false
-      Integer :step_id, :null=>false
+      Integer :deploy_step_id, :null=>false
       TrueClass :active, :null=>false
       DateTime :started_at
       DateTime :completed_at
