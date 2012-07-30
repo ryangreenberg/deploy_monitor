@@ -22,7 +22,7 @@ CONFIG = OpenStruct.new({
 
 class DeployMonitor < Sinatra::Base
   get '/' do
-    @deploys = Deploy.active
+    @systems = System.all
     erb :index
   end
 

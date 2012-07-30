@@ -1,16 +1,22 @@
-<% @deploys.each do |deploy| %>
-  <h2><%= deploy.system.name %> (#<%= deploy.id %>)</h2>
-  <% if deploy.active_step %>
-  <h3 data-started-at="<% deploy.active_step.started_at.to_i %>"><%= deploy.active_step.deploy_step.description %>&hellip;</h3>
-  <% end %>
+<% @systems.each do |system| %>
+  <h2><%= system.name %></h2>
+  <% if system.active_deploy %>
+    <% deploy = system.active_deploy %>
+    <h3>Deploy <%= deploy.id %> in progress</h3>
+    <% if deploy.active_step %>
+      <h3 data-started-at="<% deploy.active_step.started_at.to_i %>"><%= deploy.active_step.deploy_step.description %>&hellip;</h3>
+    <% end %>
 
-  <div class="progress-bar-wrapper">
-    <div class="progress-bar" style="width: <%= deploy.progress_percentage %>%"></div>
-  </div>
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar" style="width: <%= deploy.progress_percentage %>%"></div>
+    </div>
 
-  <ul>
-  <% deploy.system.deploy_steps.each do |deploy_step| %>
-    <li class="<%= deploy.current_step?(deploy_step) ? 'active' : '' %>"><%= deploy_step.description %></li>
+    <ul>
+    <% deploy.system.deploy_steps.each do |deploy_step| %>
+      <li class="<%= deploy.current_step?(deploy_step) ? 'active' : '' %>"><%= deploy_step.description %></li>
+    <% end %>
+    </ul>
+  <% else %>
+    <h3>No deploy in progress</h3>
   <% end %>
-  </ul>
-<% end %>
+<% end %>
