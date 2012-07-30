@@ -98,9 +98,14 @@ class DeployMonitor < Sinatra::Base
   get '/:system/deploys' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
-    halt 404, "Unknown system '#{system_name}'"
+    halt 404, "Unknown system '#{system_name}'" unless system
 
-    {:deploys => Deploy.all(:system => system)}.to_json(:naked => true, :include => :steps)
+    deploys = Deploy.filter(:system => system)
+    if ['true', 'false'].include?(params[:active])
+      active_status = params[:active] == 'true'
+      deploys = deploys.filter(:active => active_status)
+    end
+    {:deploys => deploys.all }.to_json(:naked => true)
   end
 
   post '/:system/deploys' do
