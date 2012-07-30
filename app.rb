@@ -141,6 +141,23 @@ class DeployMonitor < Sinatra::Base
     deploy.to_json
   end
 
+  post '/deploys/:deploy_id/complete' do
+    deploy_id = params[:deploy_id]
+    deploy = Deploy[deploy_id]
+    halt 404, "Deploy #{deploy_id} could not be found" unless deploy
+    halt 400, "Deploy #{deploy_id} is not active" unless deploy.active
+
+    DB.transaction do
+      now = Time.now
+      Step.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
+      deploy.active = false
+      deploy.result = Deploy::RESULTS[:complete]
+      deploy.save
+    end
+
+    deploy.to_json
+  end
+
   post '/deploys/:deploy_id/step/:step' do
     deploy_id = params[:deploy_id]
     deploy = Deploy[deploy_id]
