@@ -40,6 +40,9 @@ PUT /deploys/:deploy_id Update the given deploy
 
 POST /deploys/:deploy_id/step/:step_name  Advance the deploy to the given step
 
+POST /deploys/:deploy_id/completion Finish the given deploy
+  Params: status
+
 To start a deploy, POST to /:system_name/deploys. This will return 201 created and return a deploy id if successful. If there is already an active deploy for this system, the response will be 400.
 
 New systems and deploy steps will be created when a deploy is created for an unknown system, or advanced to an unknown step. If you want to disable this feature, change the config values for implicit_system_creation and implicit_step_creation.
