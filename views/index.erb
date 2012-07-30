@@ -1,0 +1,16 @@
+<% @deploys.each do |deploy| %>
+  <h2><%= deploy.system.name %> (#<%= deploy.id %>)</h2>
+  <% if deploy.active_step %>
+  <h3 data-started-at="<% deploy.active_step.started_at.to_i %>"><%= deploy.active_step.deploy_step.description %>&hellip;</h3>
+  <% end %>
+
+  <div class="progress-bar-wrapper">
+    <div class="progress-bar" style="width: <%= deploy.progress_percentage %>%"></div>
+  </div>
+
+  <ul>
+  <% deploy.system.deploy_steps.each do |deploy_step| %>
+    <li class="<%= deploy.current_step?(deploy_step) ? 'active' : '' %>"><%= deploy_step.description %></li>
+  <% end %>
+  </ul>
+<% end %>

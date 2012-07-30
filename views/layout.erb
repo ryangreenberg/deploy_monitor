@@ -1,0 +1,13 @@
+<html>
+<head>
+  <title><%= @page_title || "Deploy Monitor" %></title>
+  <style>
+  .active { color: #f00; }
+  .progress-bar-wrapper { width: 50%; border: 1px solid #ccc }
+  .progress-bar { height: 10px; background-color: #ccc; }
+  </style>
+</head>
+<body>
+<%= yield %>
+</body>
+</html>
