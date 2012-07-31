@@ -118,7 +118,11 @@ class DeployMonitor < Sinatra::Base
     if active_deploy
       [400, {:error => "Cannot create new deploy for '#{system_name}' because deploy id #{active_deploy.id} is active"}.to_json]
     else
-      deploy = Deploy.create(:active => true, :system => system)
+      deploy = Deploy.create(
+        :active => true,
+        :system => system,
+        :started_at => Time.now
+      )
       [201, deploy.to_json]
     end
   end
@@ -135,7 +139,24 @@ class DeployMonitor < Sinatra::Base
     deploy = Deploy[deploy_id]
     halt 404, "Deploy #{deploy_id} could not be found" unless deploy
 
-    deploy.set_fields(params, [:owner, :ticket])
+    # TODO: This metadata management would be better as a method on Deploy
+    exclude_from_metadata = ['captures', 'splat', 'deploy_id']
+    metadata_params = params.reject {|k, v| exclude_from_metadata.include?(k)}
+
+    metadata = if deploy.metadata
+      JSON.parse(deploy.metadata)
+    else
+      {}
+    end
+    metadata_params.each do |k, v|
+      if v =~ /null/i
+        metadata.delete(k)
+      else
+        metadata[k] = v
+      end
+    end
+
+    deploy.metadata = JSON.dump(metadata)
     deploy.save
 
     deploy.to_json
@@ -147,11 +168,13 @@ class DeployMonitor < Sinatra::Base
     halt 404, "Deploy #{deploy_id} could not be found" unless deploy
     halt 400, "Deploy #{deploy_id} is not active" unless deploy.active
 
+    result = Models::RESULTS[params[:result].to_sym] || Models::RESULTS[:complete]
+
     DB.transaction do
       now = Time.now
-      Progress.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
+      Progress.filter(:deploy => deploy, :active => true).update(:active => false, :finished_at => now)
       deploy.active = false
-      deploy.result = Models::RESULTS[:complete]
+      deploy.result = result
       deploy.save
     end
 
@@ -178,7 +201,7 @@ class DeployMonitor < Sinatra::Base
       now = Time.now
       Progress.filter(:deploy => deploy, :active => true).update(
         :active => false,
-        :completed_at => now,
+        :finished_at => now,
         :result => Models::RESULTS[:complete]
       )
       Progress.create(:deploy => deploy, :step => step, :active => true, :started_at => now)
