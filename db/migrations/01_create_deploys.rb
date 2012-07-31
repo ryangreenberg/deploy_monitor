@@ -18,8 +18,6 @@ Sequel.migration do
       Integer :system_id, :null=>false
       TrueClass :active, :null=>false
       Integer :result, :null=>true
-      String :owner, :size=>80
-      String :ticket, :size=>80
       String :metadata, :text=>true
       DateTime :started_at
       DateTime :finished_at
