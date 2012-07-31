@@ -21,6 +21,8 @@ Sequel.migration do
       String :owner, :size=>80
       String :ticket, :size=>80
       String :metadata, :text=>true
+      DateTime :started_at
+      DateTime :finished_at
       DateTime :created_at
       DateTime :updated_at
     end
@@ -30,8 +32,9 @@ Sequel.migration do
       Integer :deploy_id, :null=>false
       Integer :step_id, :null=>false
       TrueClass :active, :null=>false
+      Integer :result, :null=>true
       DateTime :started_at
-      DateTime :completed_at
+      DateTime :finished_at
       DateTime :created_at
       DateTime :updated_at
     end
