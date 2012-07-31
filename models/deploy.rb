@@ -1,5 +1,3 @@
-require 'sequel/plugins/json_serializer'
-
 class Deploy < Sequel::Model
   many_to_one :system
   one_to_many :progresses
@@ -30,5 +28,32 @@ class Deploy < Sequel::Model
     else
       0
     end
+  end
+
+  def to_hash(options = {})
+    hsh = values.dup
+
+    # Use integer timestamps
+    [:created_at, :updated_at, :started_at, :finished_at].each do |ts_field|
+      if hsh[ts_field]
+        hsh[ts_field] = hsh[ts_field].to_i
+      end
+    end
+
+    # Provide system object
+    hsh.delete(:system_id)
+    hsh[:system] = system.to_hash
+
+    # Provide progress objects
+    hsh[:progress] = progresses.map {|ea| ea.to_hash}
+
+    # Provide metadata
+    hsh[:metadata] = hsh[:metadata] ? JSON.parse(hsh[:metadata]) : {}
+
+    hsh
+  end
+
+  def to_json(options = {})
+    to_hash(options).to_json
   end
 end
