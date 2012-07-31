@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby -KU -rubygems
-require 'ruby-debug'
 require 'ostruct'
 
 require 'bundler/setup'
@@ -9,10 +8,7 @@ require 'sequel'
 
 DB_URL = 'mysql://root@localhost/rg_test'
 DB = Sequel.connect(DB_URL)
-require 'models/system'
-require 'models/step'
-require 'models/deploy'
-require 'models/progress'
+require 'models'
 
 CONFIG = OpenStruct.new({
   :implicit_system_creation => true,
@@ -155,7 +151,7 @@ class DeployMonitor < Sinatra::Base
       now = Time.now
       Progress.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
       deploy.active = false
-      deploy.result = Deploy::RESULTS[:complete]
+      deploy.result = Models::RESULTS[:complete]
       deploy.save
     end
 
@@ -180,7 +176,11 @@ class DeployMonitor < Sinatra::Base
 
     progress = DB.transaction do
       now = Time.now
-      Progress.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
+      Progress.filter(:deploy => deploy, :active => true).update(
+        :active => false,
+        :completed_at => now,
+        :result => Models::RESULTS[:complete]
+      )
       Progress.create(:deploy => deploy, :step => step, :active => true, :started_at => now)
     end
 

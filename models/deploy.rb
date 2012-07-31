@@ -12,12 +12,6 @@ class Deploy < Sequel::Model
   @json_serializer_opts = {:naked => true}
   self.plugin :json_serializer
 
-  RESULTS = {
-    :complete => 0,
-    :failed => 1,
-    :abandoned => 2
-  }
-
   def self.active
     filter { {:active => true} }
   end
