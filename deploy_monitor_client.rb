@@ -87,4 +87,4 @@ else
   deploy = deploy_monitor.start_deploy(system_name)
 end
 
-deploy.progress_to(:rspec_tests, "Running RSpec Ruby tests")
+deploy.progress_to(:jshint, "Running RSpec Ruby tests")

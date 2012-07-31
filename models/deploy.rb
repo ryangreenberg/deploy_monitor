@@ -2,7 +2,7 @@ require 'sequel/plugins/json_serializer'
 
 class Deploy < Sequel::Model
   many_to_one :system
-  one_to_many :steps
+  one_to_many :progresses
 
   self.plugin :timestamps,
     :create => :created_at,
@@ -22,17 +22,17 @@ class Deploy < Sequel::Model
     filter { {:active => true} }
   end
 
-  def active_step
-    Step.filter(:deploy => self, :active => true).first
+  def current_progress
+    Progress.filter(:deploy => self, :active => true).first
   end
 
-  def current_step?(step)
-    active_step && active_step.deploy_step == step
+  def at_step?(step)
+    current_progress && current_progress.step == step
   end
 
   def progress_percentage
-    if active_step
-      system.deploy_steps.index(active_step.deploy_step) / system.deploy_steps.size.to_f * 100
+    if current_progress
+      system.steps.index(current_progress.step) / system.steps.size.to_f * 100
     else
       0
     end

@@ -5,7 +5,7 @@ Sequel.migration do
       String :name, :size=>80
     end
 
-    create_table(:deploy_steps) do
+    create_table(:steps) do
       primary_key :id
       Integer :system_id, :null=>false
       String :name, :size=>80
@@ -25,10 +25,10 @@ Sequel.migration do
       DateTime :updated_at
     end
 
-    create_table(:steps) do
+    create_table(:progresses) do
       primary_key :id
       Integer :deploy_id, :null=>false
-      Integer :deploy_step_id, :null=>false
+      Integer :step_id, :null=>false
       TrueClass :active, :null=>false
       DateTime :started_at
       DateTime :completed_at
@@ -38,6 +38,6 @@ Sequel.migration do
   end
 
   down do
-    drop_table(:systems, :deploy_steps, :deploys, :steps)
+    drop_table(:systems, :steps, :deploys, :progresses)
   end
 end

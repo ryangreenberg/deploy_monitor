@@ -10,10 +10,9 @@ require 'sequel'
 DB_URL = 'mysql://root@localhost/rg_test'
 DB = Sequel.connect(DB_URL)
 require 'models/system'
-require 'models/deploy_step'
-require 'models/deploy'
 require 'models/step'
-
+require 'models/deploy'
+require 'models/progress'
 
 CONFIG = OpenStruct.new({
   :implicit_system_creation => true,
@@ -46,7 +45,7 @@ class DeployMonitor < Sinatra::Base
     system = System.filter(:name => system_name).first
     halt 404, "Unknown system '#{system_name}'" unless system
 
-    {:steps => DeployStep.filter(:system => system).all }.to_json
+    {:steps => Step.filter(:system => system).all }.to_json
   end
 
   post '/:system/steps' do
@@ -65,10 +64,10 @@ class DeployMonitor < Sinatra::Base
     number = params[:number] || 0
     halt 400, "Missing required param 'name'" unless name
 
-    existing_step = DeployStep.filter(:name => name).first
+    existing_step = Step.filter(:name => name).first
     halt 400, "Step '#{name}' already exists with id #{existing_step.id}" if existing_step
 
-    step = DeployStep.create(
+    step = Step.create(
       :system => system,
       :name => name,
       :description => description,
@@ -79,14 +78,14 @@ class DeployMonitor < Sinatra::Base
 
   get '/steps/:step_id' do
     step_id = params[:step_id]
-    step = DeployStep[step_id]
+    step = Step[step_id]
     halt 404, "Step #{step_id} could not be found" unless step
     step.to_json
   end
 
   put '/steps/:step_id' do
     step_id = params[:step_id]
-    step = DeployStep[step_id]
+    step = Step[step_id]
     halt 404, "Step #{step_id} could not be found" unless step
 
     step.set_fields(params, [:description, :number])
@@ -154,7 +153,7 @@ class DeployMonitor < Sinatra::Base
 
     DB.transaction do
       now = Time.now
-      Step.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
+      Progress.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
       deploy.active = false
       deploy.result = Deploy::RESULTS[:complete]
       deploy.save
@@ -169,22 +168,22 @@ class DeployMonitor < Sinatra::Base
     halt 404, "Deploy #{deploy_id} could not be found" unless deploy
 
     step_name = params[:step]
-    deploy_step = DeployStep.filter(:system => deploy.system, :name => step_name).first
-    if deploy_step.nil?
+    step = Step.filter(:system => deploy.system, :name => step_name).first
+    if step.nil?
       if CONFIG.implicit_step_creation
         # TODO. Use past steps in current deploy to determine step number
-        deploy_step = DeployStep.create(:name => step_name, :system => deploy.system)
+        step = step.create(:name => step_name, :system => deploy.system)
       else
         halt 400, "Cannot add unknown step '#{step_name}' to deploy"
       end
     end
 
-    step = DB.transaction do
+    progress = DB.transaction do
       now = Time.now
-      Step.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
-      Step.create(:deploy => deploy, :deploy_step => deploy_step, :active => true, :started_at => now)
+      Progress.filter(:deploy => deploy, :active => true).update(:active => false, :completed_at => now)
+      Progress.create(:deploy => deploy, :step => step, :active => true, :started_at => now)
     end
 
-    [201, deploy_step.to_json]
+    [201, progress.to_json]
   end
 end

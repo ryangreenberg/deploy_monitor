@@ -3,8 +3,8 @@
   <% if system.active_deploy %>
     <% deploy = system.active_deploy %>
     <h3>Deploy <%= deploy.id %> in progress</h3>
-    <% if deploy.active_step %>
-      <h3 data-started-at="<% deploy.active_step.started_at.to_i %>"><%= deploy.active_step.deploy_step.description %>&hellip;</h3>
+    <% if deploy.current_progress %>
+      <h3 data-started-at="<% deploy.current_progress.started_at.to_i %>"><%= deploy.current_progress.step.description %>&hellip;</h3>
     <% end %>
 
     <div class="progress-bar-wrapper">
@@ -12,8 +12,8 @@
     </div>
 
     <ul>
-    <% deploy.system.deploy_steps.each do |deploy_step| %>
-      <li class="<%= deploy.current_step?(deploy_step) ? 'active' : '' %>"><%= deploy_step.description %></li>
+    <% deploy.system.steps.each do |step| %>
+      <li class="<%= deploy.at_step?(step) ? 'active' : '' %>"><%= step.description %></li>
     <% end %>
     </ul>
   <% else %>
