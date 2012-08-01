@@ -1,20 +1,23 @@
 #!/usr/bin/env ruby -KU -rubygems
+# stdlib
 require 'ostruct'
+require 'yaml'
 
+# rubygems
 require 'bundler/setup'
 require 'json'
 require 'sinatra'
 require 'sequel'
 
-DB_URL = 'mysql://root@localhost/rg_test'
+# config
+config_file = File.exist?('config_local.yml') ? 'config_local.yml' : 'config.yml'
+CONFIG = YAML.load_file(config_file)
+DB_URL = "mysql://#{CONFIG['db']['username']}:#{CONFIG['db']['password']}@#{CONFIG['db']['host']}/#{CONFIG['db']['name']}"
 DB = Sequel.connect(DB_URL)
+
+# application
 require 'models'
 require 'time_utils'
-
-CONFIG = OpenStruct.new({
-  :implicit_system_creation => true,
-  :implicit_step_creation => false
-})
 
 class DeployMonitor < Sinatra::Base
   include TimeUtils
@@ -51,7 +54,7 @@ class DeployMonitor < Sinatra::Base
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     if system.nil?
-      if CONFIG.implicit_system_creation
+      if CONFIG['implicit_system_creation']
         system = System.create(:name => system_name)
       else
         halt 404, "Cannot create new step for unknown system '#{system_name}'"
@@ -110,7 +113,7 @@ class DeployMonitor < Sinatra::Base
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     if system.nil?
-      if CONFIG.implicit_system_creation
+      if CONFIG['implicit_system_creation']
         system = System.create(:name => system_name)
       else
         halt 404, "Cannot create new deploy for unknown system '#{system_name}'"
@@ -193,7 +196,7 @@ class DeployMonitor < Sinatra::Base
     step_name = params[:step]
     step = Step.filter(:system => deploy.system, :name => step_name).first
     if step.nil?
-      if CONFIG.implicit_step_creation
+      if CONFIG['implicit_step_creation']
         step_number = deploy.next_step_number
         step = step.create(
           :name => step_name,

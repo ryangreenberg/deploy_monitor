@@ -1,0 +1,8 @@
+implicit_system_creation: true
+implicit_step_creation: false
+
+db:
+  host: ''
+  name: ''
+  username: ''
+  password: ''
