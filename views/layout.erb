@@ -1,13 +1,13 @@
 <html>
 <head>
   <title><%= @page_title || "Deploy Monitor" %></title>
-  <style>
-  .active { color: #f00; }
-  .progress-bar-wrapper { width: 50%; border: 1px solid #ccc }
-  .progress-bar { height: 10px; background-color: #ccc; }
-  </style>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/css/app.css" type="text/css" media="screen">
 </head>
 <body>
+  <div class="container">
+    <h1 id="header">Deploy Monitor</h1>
 <%= yield %>
+  </div>
 </body>
 </html>

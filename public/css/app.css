@@ -1,0 +1,22 @@
+#header {
+  margin: 20px 0px 10px 0px;
+}
+
+.system {
+  border: 1px solid #ccc; padding: 5px 10px 5px 10px;
+}
+
+.system-name .status {
+  color: #aaa;
+  font-size: 60%;
+  text-transform: uppercase;
+  font-weight: normal;
+}
+
+.current-progress {
+  font-size: 14px;
+}
+
+/*.deploy-progress {
+  margin-bottom: 4px;
+}*/
