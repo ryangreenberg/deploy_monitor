@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'json', '~> 1.6.0'
+gem 'json', '1.6.6'
 gem 'sinatra'
 gem 'sequel', '~> 3.33.0'
 gem 'sqlite3', '~> 1.3.6'
