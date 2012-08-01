@@ -116,7 +116,7 @@ class DeployMonitor < Sinatra::Base
 
     active_deploy = Deploy.active.filter(:system => system).first
     if active_deploy
-      [400, {:error => "Cannot create new deploy for '#{system_name}' because deploy id #{active_deploy.id} is active"}.to_json]
+      [400, "Cannot create new deploy for '#{system_name}' because deploy id #{active_deploy.id} is active"]
     else
       deploy = Deploy.create(
         :active => true,
