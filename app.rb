@@ -4,7 +4,6 @@ require 'ostruct'
 require 'yaml'
 
 # rubygems
-require 'bundler/setup'
 require 'json'
 require 'sinatra'
 require 'sequel'
