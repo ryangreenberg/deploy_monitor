@@ -43,6 +43,11 @@ class Deploy < Sequel::Model
       end
     end
 
+    # Convert result enum to named value
+    if hsh[:result]
+      hsh[:result] = Models::RESULTS.invert[hsh[:result]]
+    end
+
     # Provide system object
     hsh.delete(:system_id)
     hsh[:system] = system.to_hash
