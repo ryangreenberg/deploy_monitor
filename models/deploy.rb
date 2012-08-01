@@ -7,11 +7,14 @@ class Deploy < Sequel::Model
     :update => :updated_at,
     :update_on_create => true
 
-  @json_serializer_opts = {:naked => true}
-  self.plugin :json_serializer
-
   def self.active
     filter { {:active => true} }
+  end
+
+  # Returns the number of the current progress associated with this deploy + 1
+  def next_step_number
+    progress = current_progress
+    progress ? current_progress.step.number : 0
   end
 
   def current_progress

@@ -8,7 +8,7 @@ class Progress < Sequel::Model
     :update_on_create => true
 
   def to_hash(options = {})
-    values.dup
+    values
   end
 
   def to_json(options = {})
