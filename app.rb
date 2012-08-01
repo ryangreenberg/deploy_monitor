@@ -60,7 +60,7 @@ class DeployMonitor < Sinatra::Base
 
     name = params[:name]
     description = params[:description] || ""
-    number = params[:number] || 0
+    number = params[:number] || system.next_step_number
     halt 400, "Missing required param 'name'" unless name
 
     existing_step = Step.filter(:name => name).first
@@ -193,8 +193,12 @@ class DeployMonitor < Sinatra::Base
     step = Step.filter(:system => deploy.system, :name => step_name).first
     if step.nil?
       if CONFIG.implicit_step_creation
-        # TODO. Use past steps in current deploy to determine step number
-        step = step.create(:name => step_name, :system => deploy.system)
+        step_number = deploy.next_step_number
+        step = step.create(
+          :name => step_name,
+          :system => deploy.system,
+          :number => step_number
+        )
       else
         halt 400, "Cannot add unknown step '#{step_name}' to deploy"
       end
