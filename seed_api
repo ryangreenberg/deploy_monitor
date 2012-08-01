@@ -1,0 +1,12 @@
+#!/bin/bash
+http -f POST localhost:4567/systems name=frontend
+
+http -f POST localhost:4567/frontend/steps name=preparing_deploy description="Preparing deploy" number=0
+http -f POST localhost:4567/frontend/steps name=selecting_branches description="Selecting branches to deploy" number=1
+http -f POST localhost:4567/frontend/steps name=jshint description="Running JSHint style checks" number=2
+http -f POST localhost:4567/frontend/steps name=js_tests description="Running JavaScript tests" number=3
+http -f POST localhost:4567/frontend/steps name=ruby_tests description="Running Ruby tests" number=4
+http -f POST localhost:4567/frontend/steps name=selenium_tests description="Running Selenium tests" number=5
+http -f POST localhost:4567/frontend/steps name=translations description="Updating translations" number=6
+http -f POST localhost:4567/frontend/steps name=static_assets description="Building static assets" number=7
+http -f POST localhost:4567/frontend/steps name=restart description="Restarting servers" number=8
