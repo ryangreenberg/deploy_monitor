@@ -9,6 +9,7 @@ require 'sequel'
 DB_URL = 'mysql://root@localhost/rg_test'
 DB = Sequel.connect(DB_URL)
 require 'models'
+require 'time_utils'
 
 CONFIG = OpenStruct.new({
   :implicit_system_creation => true,
@@ -16,6 +17,8 @@ CONFIG = OpenStruct.new({
 })
 
 class DeployMonitor < Sinatra::Base
+  include TimeUtils
+
   get '/' do
     @systems = System.all
     erb :index
