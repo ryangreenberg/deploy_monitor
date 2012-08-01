@@ -177,6 +177,7 @@ class DeployMonitor < Sinatra::Base
       now = Time.now
       Progress.filter(:deploy => deploy, :active => true).update(:active => false, :finished_at => now)
       deploy.active = false
+      deploy.finished_at = now
       deploy.result = result
       deploy.save
     end
