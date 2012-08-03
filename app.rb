@@ -41,6 +41,14 @@ class DeployMonitor < Sinatra::Base
     [201, system.to_json]
   end
 
+  get '/systems/:system' do
+    system_name = params[:system]
+    system = System.filter(:name => system_name).first
+    halt 404, "Unknown system '#{system_name}'" unless system
+
+    system.to_json
+  end
+
   get '/:system/steps' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
