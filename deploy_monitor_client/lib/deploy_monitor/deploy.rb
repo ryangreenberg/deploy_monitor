@@ -27,10 +27,10 @@ module DeployMonitor
       self.finished_at = api_obj['finished_at'] ? Time.at(api_obj['finished_at']) : nil
     end
 
-    def progress_to(step, description)
+    def progress_to(step, description = nil)
       begin
         RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/step/#{step}", {:description => description}
-        false
+        true
       rescue RestClient::BadRequest => e
         raise UnknownDeployStep, e.response
       end
