@@ -11,44 +11,7 @@ When no deploy is happening:
 
 ## Resources
 
-- Systems
-- Deploy Steps
-- Deploys
-
-GET /systems List known systems
-
-POST /systems Create a new system
-  Params: name
-
-GET /:system_name/steps List the steps to deploy the given system
-
-POST /:system_name/steps Create a new step for the given system
-  Params: name, description, number
-
-GET /steps/:step_id Get the given deploy step
-
-PUT /steps/:step_id Update the given deploy step
-  Params: name, description, number
-
-GET /:system_name/deploys List the deploys for the given system
-  Params: active (true|false)
-
-POST /:system_name/deploys Create a new deploy for the given system
-
-GET /deploys/:deploy_id Get the given deploy
-
-PUT /deploys/:deploy_id Update the given deploy
-  Params: any arbitrary data can be associated with a deploy. Put the string "null" to delete the data. For example:
-  PUT /deploys/10 ticket=APP-123&owner=alice&color=null
-
-POST /deploys/:deploy_id/step/:step_name  Advance the deploy to the given step
-
-POST /deploys/:deploy_id/completion Finish the given deploy
-  Params: result (complete|failed)
-
-To start a deploy, POST to /:system_name/deploys. This will return 201 created and return a deploy id if successful. If there is already an active deploy for this system, the response will be 400.
-
-New systems and deploy steps will be created when a deploy is created for an unknown system, or advanced to an unknown step. If you want to disable this feature, change the config values for implicit_system_creation and implicit_step_creation.
+See README_API.md
 
 # Development
 Migrate: ./migrate
