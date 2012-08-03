@@ -1,0 +1,4 @@
+source 'http://gems.local.twitter.com'
+
+# Specify your gem's dependencies in deploy_monitor.gemspec
+gemspec

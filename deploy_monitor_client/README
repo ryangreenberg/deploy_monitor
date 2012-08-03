@@ -1,0 +1,31 @@
+## Ruby API ##
+deploy_monitor = DeployMonitor::Client.new('http://localhost:4567')
+current_deploy = deploy_monitor.current_deploy(:peacock)
+deploy = deploy_monitor.start_deploy(:peacock)
+deploy.progress # => [ ... ]
+deploy.progress_to(:rpsec_tests, "Running RSpec Ruby tests")
+deploy.progress_to(:jshint, "Running RSpec Ruby tests")
+deploy.complete
+deploy.fail
+
+
+## Sample Usage ##
+deploy_monitor = DeployMonitor.new('http://localhost:4567')
+system_name = :frontend
+
+current_deploy = deploy_monitor.current_deploy(system_name)
+if current_deploy
+  puts "There is an existing active deploy for #{system_name} (id ##{current_deploy.deploy_id})."
+  print "[U]se this deploy or [a]bort it? (u) "
+  decision = STDIN.gets
+  deploy = if decision.strip.downcase == 'a'
+    current_deploy.fail
+    deploy_monitor.start_deploy(system_name)
+  else
+    current_deploy
+  end
+else
+  deploy = deploy_monitor.start_deploy(system_name)
+end
+
+deploy.progress_to(:jshint, "Running RSpec Ruby tests")
