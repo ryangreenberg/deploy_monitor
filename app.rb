@@ -199,6 +199,7 @@ class DeployMonitor < Sinatra::Base
     deploy_id = params[:deploy_id]
     deploy = Deploy[deploy_id]
     halt 404, "Deploy #{deploy_id} could not be found" unless deploy
+    halt 400, "Cannot add steps to an inactive deploy" unless deploy.active
 
     step_name = params[:step]
     step = Step.filter(:system => deploy.system, :name => step_name).first
