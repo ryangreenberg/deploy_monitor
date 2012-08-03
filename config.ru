@@ -1,4 +1,2 @@
 require 'app'
-run DeployMonitor
-
-# run Rack::URLMap.new("/" => App.new, "/api" => Api.new)
+run Rack::URLMap.new("/" => DeployMonitor::UI.new, "/api" => DeployMonitor::API.new)

@@ -7,6 +7,7 @@ require 'yaml'
 require 'json'
 require 'sinatra'
 require 'sequel'
+require 'maruku'
 
 # config
 config_file = File.exist?('config_local.yml') ? 'config_local.yml' : 'config.yml'
@@ -18,12 +19,20 @@ DB = Sequel.connect(DB_URL)
 require 'models'
 require 'time_utils'
 
-class DeployMonitor < Sinatra::Base
+module DeployMonitor
+class UI < Sinatra::Base
   include TimeUtils
 
   get '/' do
     @systems = System.all
     erb :index
+  end
+end
+
+class API < Sinatra::Base
+  get '/' do
+    docs = Maruku.new(File.read("README_API.md")).to_html
+    erb docs
   end
 
   get '/systems' do
@@ -228,4 +237,5 @@ class DeployMonitor < Sinatra::Base
 
     [201, progress.to_json]
   end
+end
 end
