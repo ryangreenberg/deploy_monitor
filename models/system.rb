@@ -13,7 +13,11 @@ class System < Sequel::Model
   end
 
   def to_hash(options = {})
-    values
+    hsh = values
+    if options[:include_steps]
+      hsh[:steps] = steps.sort_by {|ea| ea.number || 0}.map {|ea| ea.to_hash}
+    end
+    hsh
   end
 
   def to_json(options = {})

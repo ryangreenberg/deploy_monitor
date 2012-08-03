@@ -1,8 +1,11 @@
-require 'sequel/plugins/json_serializer'
-
 class Step < Sequel::Model
   many_to_one :system
 
-  @json_serializer_opts = {:naked => true}
-  self.plugin :json_serializer
+  def to_hash(options = {})
+    values
+  end
+
+  def to_json(options = {})
+    to_hash(options).to_json
+  end
 end
