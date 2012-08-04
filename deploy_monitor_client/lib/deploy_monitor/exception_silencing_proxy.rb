@@ -5,9 +5,9 @@ module DeployMonitor
       @logger = logger
     end
 
-    def method_missing(:method_name, *args)
+    def method_missing(method_name, *args)
       begin
-        @obj.send(:method_name, *args)
+        @obj.send(method_name, *args)
       rescue Exception => e
         @logger.warn(e)
       end
