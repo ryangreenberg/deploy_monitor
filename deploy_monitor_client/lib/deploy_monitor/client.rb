@@ -6,7 +6,7 @@ module DeployMonitor
 
     def get_system(name)
       begin
-        rsp = RestClient.get "#{@host}/systems/#{name}"
+        rsp = RestClient.get "#{base_url}/systems/#{name}"
         System.from_api(self, JSON.parse(rsp.body))
       rescue RestClient::ResourceNotFound => e
         nil
@@ -15,12 +15,12 @@ module DeployMonitor
     end
 
     def create_system(name)
-      RestClient.post "#{@host}/systems", {:name => name}
+      RestClient.post "#{base_url}/systems", {:name => name}
     end
 
     def start_deploy(system)
       begin
-        rsp = RestClient.post "#{@host}/#{system}/deploys", {}
+        rsp = RestClient.post "#{base_url}/#{system}/deploys", {}
         Deploy.from_api(self, JSON.parse(rsp.body))
       rescue RestClient::BadRequest => e
         raise e, e.response
@@ -47,7 +47,7 @@ module DeployMonitor
     end
 
     def base_url
-      "#{@host}"
+      "#{@host}/api"
     end
   end
 end
