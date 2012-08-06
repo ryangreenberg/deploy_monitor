@@ -1,0 +1,47 @@
+<div class="row">
+  <h2 class="span12"><%= @deploy.system.name %> Deploy <%= @deploy.id %></h2>
+
+  <div class="span12">
+    <% if @deploy.active %>
+      <h2>
+        <span class="status">
+          In progress &middot;
+          <span class="started-at">Started <%= format_hms("%M:%S", Time.now - @deploy.started_at) %> ago</span>
+        </span>
+      </h2>
+
+      <% if @deploy.current_progress %>
+        <h3 class="current-progress"><%= @deploy.current_progress.step.description %>&hellip;</h3>
+      <% end %>
+
+      <div class="deploy-progress progress">
+        <div class="bar" style="width: <%= @deploy.progress_percentage %>%;"></div>
+      </div>
+    <% else %>
+      <h3><%= @deploy.result_label %></h3>
+    <% end %>
+  </div>
+
+  <table class="span12 table table-bordered">
+    <thead>
+      <tr>
+        <th>Step</th>
+        <th>Description</th>
+        <th>Duration</th>
+        <!-- <th>Started</th> -->
+        <!-- <th>Finished</th> -->
+      </tr>
+    </thead>
+
+  <% @deploy.progresses.each do |progress| %>
+    <tr>
+      <td><%= progress.step.name %></td>
+      <td><%= progress.step.description %></td>
+      <td><%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %></td>
+      <!-- <td><%= progress.started_at %></td> -->
+      <!-- <td><%= progress.finished_at %></td> -->
+    </tr>
+  <% end %>
+  </table>
+
+</div>

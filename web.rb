@@ -6,4 +6,10 @@ class DeployMonitor::Web < Sinatra::Base
     @past_deploys = Deploy.filter(:active => false).order(:finished_at.desc).limit(10)
     erb :index
   end
+
+  get '/deploys/:deploy_id' do
+    @deploy = Deploy[params[:deploy_id]]
+    halt 404 unless @deploy
+    erb :deploy
+  end
 end
