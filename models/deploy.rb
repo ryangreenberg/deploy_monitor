@@ -11,6 +11,21 @@ class Deploy < Sequel::Model
     filter { {:active => true} }
   end
 
+  module Result
+    def complete?
+      result == Models::RESULTS[:complete]
+    end
+
+    def failed?
+      result == Models::RESULTS[:failed]
+    end
+
+    def result_label
+      Models::RESULTS.invert[result]
+    end
+  end
+  include Result
+
   # Returns the number of the current progress associated with this deploy + 1
   def next_step_number
     progress = current_progress
