@@ -1,6 +1,7 @@
-<div class="row">
+<div class="row" style="margin-bottom: 20px">
+  <h2 class="span12">Active Deploys</h2>
 <% @systems.each do |system| %>
-  <div class="span6 system">  
+  <div class="span6 system">
 
   <% deploy = system.active_deploy %>
   <h2 class="system-name">
@@ -16,7 +17,7 @@
   <% if deploy.current_progress %>
     <h3 class="current-progress"><%= deploy.current_progress.step.description %>&hellip;</h3>
   <% end %>
-  
+
   <div class="deploy-progress progress">
     <div class="bar" style="width: <%= deploy.progress_percentage %>%;"></div>
   </div>
@@ -31,4 +32,33 @@
   <% end %>
   </div>
 <% end %>
+</div>
+
+<div class="row">
+  <h2 class="span12">Recent Deploys</h2>
+  <table class="span12 table table-bordered">
+    <thead>
+      <tr>
+        <th>System</th>
+        <th>Deploy</th>
+        <th>Result</th>
+        <th>Finished</th>
+        <th>Duration</th>
+      </tr>
+    </thead>
+
+  <% @past_deploys.each do |past_deploy| %>
+    <tr>
+      <td><%= past_deploy.system.name %></td>
+      <td><%= past_deploy.id %></td>
+      <td>
+        <span class="label <%= past_deploy.complete? ? 'label-success' : 'label-error' %>">
+          <%= past_deploy.result_label %>
+        </span>
+      </td>
+      <td><%= past_deploy.finished_at %></td>
+      <td><%= format_hms("(%?Hh) %Mm %Ss", past_deploy.duration) %></td>
+    </tr>
+  <% end %>
+  </table>
 </div>
