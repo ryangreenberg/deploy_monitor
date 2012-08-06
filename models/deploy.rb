@@ -48,35 +48,46 @@ class Deploy < Sequel::Model
     end
   end
 
-  def to_hash(options = {})
-    hsh = values.dup
+  def duration
+    if started_at && finished_at
+      finished_at - started_at
+    else
+      nil
+    end
+  end
 
-    # Use integer timestamps
-    [:created_at, :updated_at, :started_at, :finished_at].each do |ts_field|
-      if hsh[ts_field]
-        hsh[ts_field] = hsh[ts_field].to_i
+  module Representation
+    def to_hash(options = {})
+      hsh = values.dup
+
+      # Use integer timestamps
+      [:created_at, :updated_at, :started_at, :finished_at].each do |ts_field|
+        if hsh[ts_field]
+          hsh[ts_field] = hsh[ts_field].to_i
+        end
       end
+
+      # Convert result enum to named value
+      if hsh[:result]
+        hsh[:result] = Models::RESULTS.invert[hsh[:result]]
+      end
+
+      # Provide system object
+      hsh.delete(:system_id)
+      hsh[:system] = system.to_hash
+
+      # Provide progress objects
+      hsh[:progress] = progresses.map {|ea| ea.to_hash}
+
+      # Provide metadata
+      hsh[:metadata] = hsh[:metadata] ? JSON.parse(hsh[:metadata]) : {}
+
+      hsh
     end
 
-    # Convert result enum to named value
-    if hsh[:result]
-      hsh[:result] = Models::RESULTS.invert[hsh[:result]]
+    def to_json(options = {})
+      to_hash(options).to_json
     end
-
-    # Provide system object
-    hsh.delete(:system_id)
-    hsh[:system] = system.to_hash
-
-    # Provide progress objects
-    hsh[:progress] = progresses.map {|ea| ea.to_hash}
-
-    # Provide metadata
-    hsh[:metadata] = hsh[:metadata] ? JSON.parse(hsh[:metadata]) : {}
-
-    hsh
   end
-
-  def to_json(options = {})
-    to_hash(options).to_json
-  end
+  include Representation
 end
