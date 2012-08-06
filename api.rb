@@ -159,7 +159,11 @@ class DeployMonitor::API < Sinatra::Base
     halt 404, "Deploy #{deploy_id} could not be found" unless deploy
     halt 400, "Deploy #{deploy_id} is not active" unless deploy.active
 
-    result = Models::RESULTS[params[:result].to_sym] || Models::RESULTS[:complete]
+    result = if params[:result]
+      Models::RESULTS[params[:result].to_sym] || Models::RESULTS[:complete]
+    else
+      Models::RESULTS[:complete]
+    end
 
     DB.transaction do
       now = Time.now
