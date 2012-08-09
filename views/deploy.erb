@@ -28,19 +28,22 @@
         <th>Step</th>
         <th>Description</th>
         <th>Duration</th>
-        <!-- <th>Started</th> -->
-        <!-- <th>Finished</th> -->
       </tr>
     </thead>
 
   <% @deploy.progresses.each do |progress| %>
-    <tr>
+    <tr class="<%= progress.active ? 'active' : '' %>">
       <td><%= progress.step.name %></td>
       <td><%= progress.step.description %></td>
       <td><%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %></td>
-      <!-- <td><%= progress.started_at %></td> -->
-      <!-- <td><%= progress.finished_at %></td> -->
     </tr>
+  <% end %>
+  <% @future_steps.each do |step| %>
+  <tr>
+    <td><%= step.name %></td>
+    <td><%= step.description %></td>
+    <td></td>
+  </tr>
   <% end %>
   </table>
 
