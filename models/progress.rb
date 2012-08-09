@@ -10,6 +10,8 @@ class Progress < Sequel::Model
   def duration
     if started_at && finished_at
       finished_at - started_at
+    elsif started_at
+      Time.now - started_at
     else
       nil
     end
