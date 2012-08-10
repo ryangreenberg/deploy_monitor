@@ -38,7 +38,7 @@ module DeployMonitor
 
     def fail
       begin
-        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete", {:result => :failure}
+        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete", {:result => :failed}
         true
       rescue RestClient::Exception
         false
@@ -47,7 +47,7 @@ module DeployMonitor
 
     def complete
       begin
-        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete", {:result => :failure}
+        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete"
         true
       rescue RestClient::Exception
         false
