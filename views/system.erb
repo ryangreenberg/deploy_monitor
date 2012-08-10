@@ -1,0 +1,41 @@
+<div class="row">
+  <h2 class="span12"><%= @system.name %></h2>
+
+  <div class="span12">
+    <h2>Deploy Steps</h2>
+    <ol>
+      <% @system.steps.each do |step| %>
+      <li><%= step.description %></li>
+      <% end %>
+    </ol>
+  </div>
+  
+  <div class="span12">
+    <h2>Recent Deploys</h2>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Deploy</th>
+          <th>Result</th>
+          <th>Finished</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+
+    <% @recent_deploys.each do |past_deploy| %>
+      <tr>
+        <td><a href="/deploys/<%= past_deploy.id %>"><%= past_deploy.id %></a></td>
+        <td>
+          <span class="label <%= past_deploy.complete? ? 'label-success' : 'label-error' %>">
+            <%= past_deploy.result_label %>
+          </span>
+        </td>
+        <td><%= past_deploy.finished_at %></td>
+        <td><%= format_hms("(%?Hh) %Mm %Ss", past_deploy.duration) %></td>
+      </tr>
+    <% end %>
+    </table>
+
+  </div>
+</div>
