@@ -158,9 +158,10 @@ class DeployMonitor::API < Sinatra::Base
     deploy = Deploy[deploy_id]
     halt 404, "Deploy #{deploy_id} could not be found" unless deploy
     halt 400, "Deploy #{deploy_id} is not active" unless deploy.active
+    halt 400, "Unknown result '#{params[:result]}'" if params[:result] && Models::RESULTS[params[:result].to_sym].nil?
 
     result = if params[:result]
-      Models::RESULTS[params[:result].to_sym] || Models::RESULTS[:complete]
+      Models::RESULTS[params[:result].to_sym]
     else
       Models::RESULTS[:complete]
     end
