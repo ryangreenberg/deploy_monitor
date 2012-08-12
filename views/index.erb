@@ -52,8 +52,8 @@
       <td><%= past_deploy.system.name %></td>
       <td><a href="/deploys/<%= past_deploy.id %>"><%= past_deploy.id %></a></td>
       <td>
-        <span class="label <%= past_deploy.complete? ? 'label-success' : 'label-error' %>">
-          <%= past_deploy.result_label %>
+        <span class="label <%= past_deploy.complete? ? 'label-success' : 'label-important' %>">
+          <%= past_deploy.status_label %>
         </span>
       </td>
       <td><%= past_deploy.finished_at %></td>
