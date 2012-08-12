@@ -1,5 +1,6 @@
 class DeployMonitor::Web < Sinatra::Base
   include TimeUtils
+  include ViewsHelpers
 
   get '/' do
     @systems = System.all

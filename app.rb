@@ -20,5 +20,6 @@ module DeployMonitor; end
 # application
 require 'models'
 require 'time_utils'
+require 'views_helpers'
 require 'web'
 require 'api'
