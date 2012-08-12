@@ -45,10 +45,12 @@ class Deploy < Sequel::Model
   end
 
   def progress_percentage
-    if current_progress
-      system.steps.index(current_progress.step) / system.steps.size.to_f * 100
-    else
-      0
+    if active
+      if current_progress
+        system.steps.index(current_progress.step) / system.steps.size.to_f * 100
+      else
+        0
+      end
     end
   end
 
