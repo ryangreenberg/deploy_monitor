@@ -47,7 +47,7 @@ module DeployMonitor
 
     def complete
       begin
-        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete"
+        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete", {}
         true
       rescue RestClient::Exception
         false
