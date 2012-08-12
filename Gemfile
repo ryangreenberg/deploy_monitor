@@ -9,3 +9,7 @@ gem 'maruku', '0.6.0'
 # gem 'thin', '~> 1.4.1'
 # gem 'erubis', '~> 2.7.0'
 
+group :development do
+  gem 'ruby-debug'
+end
+
