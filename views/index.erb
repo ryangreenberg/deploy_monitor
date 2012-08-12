@@ -9,7 +9,7 @@
     <span class="status">
     <% if deploy %>
       <a href="/deploys/<%= deploy.id %>">In progress</a> &middot;
-      <span class="started-at">Started <%= format_hms("%M:%S", Time.now - deploy.started_at) %> ago</span>
+      <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="%M:%S"><%= format_hms("%M:%S", Time.now - deploy.started_at) %></span> ago</span>
     <% end %>
     </span>
   </h2>
