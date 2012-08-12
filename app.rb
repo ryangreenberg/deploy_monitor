@@ -6,6 +6,7 @@ require 'yaml'
 # rubygems
 require 'json'
 require 'sinatra'
+require 'sinatra/partial'
 require 'sequel'
 require 'maruku'
 

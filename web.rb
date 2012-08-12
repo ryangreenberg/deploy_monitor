@@ -2,6 +2,9 @@ class DeployMonitor::Web < Sinatra::Base
   include TimeUtils
   include ViewsHelpers
 
+  register Sinatra::Partial
+  set :partial_template_engine, :erb
+
   get '/' do
     @systems = System.all
     @past_deploys = Deploy.filter(:active => false).order(:finished_at.desc).limit(10)
