@@ -33,7 +33,7 @@ Params: name
 ### `GET /:system_name/steps`
 List the steps to deploy the given system
 
-### POST `/:system_name/steps`
+### `POST /:system_name/steps`
 Create a new step for the given system
 
 Params: name, description, number
