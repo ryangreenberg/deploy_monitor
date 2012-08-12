@@ -8,7 +8,7 @@
     <%= system.name %>
     <span class="status">
     <% if deploy %>
-      In progress &middot;
+      <a href="/deploys/<%= deploy.id %>">In progress</a> &middot;
       <span class="started-at">Started <%= format_hms("%M:%S", Time.now - deploy.started_at) %> ago</span>
     <% end %>
     </span>
