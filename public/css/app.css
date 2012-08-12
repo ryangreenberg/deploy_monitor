@@ -17,6 +17,10 @@
   font-size: 14px;
 }
 
+table tr.active {
+  color: #00c;
+}
+
 /*.deploy-progress {
   margin-bottom: 4px;
 }*/
