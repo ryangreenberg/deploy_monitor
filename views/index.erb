@@ -49,7 +49,7 @@
 
   <% @past_deploys.each do |past_deploy| %>
     <tr>
-      <td><%= past_deploy.system.name %></td>
+      <td><a href ="/systems/<%= past_deploy.system.name %>"><%= past_deploy.system.name %></a></td>
       <td><a href="/deploys/<%= past_deploy.id %>"><%= past_deploy.id %></a></td>
       <td>
         <span class="label <%= past_deploy.complete? ? 'label-success' : 'label-important' %>">
