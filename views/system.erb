@@ -23,17 +23,8 @@
         </tr>
       </thead>
 
-    <% @recent_deploys.each do |past_deploy| %>
-      <tr>
-        <td><a href="/deploys/<%= past_deploy.id %>"><%= past_deploy.id %></a></td>
-        <td>
-          <span class="label <%= display_label(past_deploy) %>">
-            <%= past_deploy.status_label %>
-          </span>
-        </td>
-        <td><%= past_deploy.finished_at %></td>
-        <td><%= format_hms("(%?Hh) %Mm %Ss", past_deploy.duration) %></td>
-      </tr>
+    <% @recent_deploys.each do |recent_deploy| %>
+      <%= partial(:deploy_row, :locals => {:include_system => false, :deploy => recent_deploy} ) %>
     <% end %>
     </table>
 
