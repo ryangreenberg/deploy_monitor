@@ -20,8 +20,12 @@ class Deploy < Sequel::Model
       result == Models::RESULTS[:failed]
     end
 
-    def result_label
-      Models::RESULTS.invert[result]
+    def status_label
+      if active
+        'in progress'
+      else
+        Models::RESULTS.invert[result]
+      end
     end
   end
   include Result
