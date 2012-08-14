@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -wKU -rubygems
+#!/usr/bin/env ruby -KU -rubygems
 
 $:.unshift("./lib")
 require 'deploy_monitor'
