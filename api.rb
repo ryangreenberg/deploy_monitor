@@ -50,6 +50,7 @@ class DeployMonitor::API < Sinatra::Base
     description = params[:description] || ""
     number = params[:number] || system.next_step_number
     halt 400, "Missing required param 'name'" unless name
+    name = name.gsub(/ /, '_').downcase
 
     existing_step = Step.filter(:name => name, :system => system).first
     halt 400, "Step '#{name}' already exists with id #{existing_step.id}" if existing_step
