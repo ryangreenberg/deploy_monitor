@@ -11,6 +11,7 @@ require 'sequel'
 require 'maruku'
 
 # config
+ENV["TZ"] = "UTC"
 config_file = File.exist?('config_local.yml') ? 'config_local.yml' : 'config.yml'
 CONFIG = YAML.load_file(config_file)
 DB_URL = "mysql://#{CONFIG['db']['username']}:#{CONFIG['db']['password']}@#{CONFIG['db']['host']}/#{CONFIG['db']['name']}"
