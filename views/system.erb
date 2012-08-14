@@ -23,9 +23,11 @@
         </tr>
       </thead>
 
-    <% @recent_deploys.each do |recent_deploy| %>
-      <%= partial(:deploy_row, :locals => {:include_system => false, :deploy => recent_deploy} ) %>
-    <% end %>
+      <tbody>
+      <% @recent_deploys.each do |recent_deploy| %>
+        <%= partial(:deploy_row, :locals => {:include_system => false, :deploy => recent_deploy} ) %>
+      <% end %>
+      </tbody>
     </table>
 
   </div>

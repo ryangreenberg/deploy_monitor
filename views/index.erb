@@ -47,8 +47,10 @@
       </tr>
     </thead>
 
-  <% @past_deploys.each do |past_deploy| %>
-    <%= partial(:deploy_row, :locals => {:include_system => true, :deploy => past_deploy} ) %>
-  <% end %>
+    <tbody>
+    <% @past_deploys.each do |past_deploy| %>
+      <%= partial(:deploy_row, :locals => {:include_system => true, :deploy => past_deploy} ) %>
+    <% end %>
+    </tbody>
   </table>
 </div>
