@@ -18,7 +18,7 @@
         <div class="bar" style="width: <%= @deploy.progress_percentage %>%;"></div>
       </div>
     <% else %>
-      <h3><%= @deploy.result_label.to_s.capitalize %> in <%= format_hms("(%?Hh) %Mm %Ss", @deploy.duration) %></h3>
+      <h3><%= @deploy.status_label.to_s.capitalize %> in <%= format_hms("(%?Hh) %Mm %Ss", @deploy.duration) %></h3>
       <div class="deploy-progress progress <%= @deploy.complete? ? 'progress-success' : 'progress-danger' %>">
         <div class="bar" style="width: 100%;"></div>
       </div>
