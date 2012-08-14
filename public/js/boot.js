@@ -1,7 +1,21 @@
-var app = {};
+function App () {
+}
 
-app.clock = new Clock($(document));
-app.clock.start();
+App.prototype.boot = function() {
+  this.clock = new Clock($(document));
+  this.clock.start();
 
-app.timeDisplay = new TimeDisplay($(document));
-app.timeDisplay.start();
+  this.timeDisplay = new TimeDisplay($(document));
+  this.timeDisplay.start();
+
+  $(this.bootDomReady.bind(this));
+};
+
+App.prototype.bootDomReady = function() {
+  this.recentDeploys = new RecentDeploys($('.recent-deploys'));
+  this.recentDeploys.startPeriodicUpdates();
+};
+
+var app = new App();
+app.boot();
+
