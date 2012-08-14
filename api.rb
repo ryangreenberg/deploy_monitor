@@ -168,7 +168,11 @@ class DeployMonitor::API < Sinatra::Base
 
     DB.transaction do
       now = Time.now
-      Progress.filter(:deploy => deploy, :active => true).update(:active => false, :finished_at => now)
+      Progress.filter(:deploy => deploy, :active => true).update(
+        :active => false,
+        :finished_at => now,
+        :result => result
+      )
       deploy.active = false
       deploy.finished_at = now
       deploy.result = result
