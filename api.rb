@@ -92,7 +92,7 @@ class DeployMonitor::API < Sinatra::Base
       active_status = params[:active] == 'true'
       deploys = deploys.filter(:active => active_status)
     end
-    {:deploys => deploys.all }.to_json(:naked => true)
+    {:deploys => deploys.all }.to_json
   end
 
   post '/:system/deploys' do
@@ -115,6 +115,9 @@ class DeployMonitor::API < Sinatra::Base
         :system => system,
         :started_at => Time.now
       )
+      first_step = Step.filter(:system => system).order(:number.asc).first
+      # TODO: This seems like it could be better exposed as a class method on Progress
+      progress = Progress.create(:deploy => deploy, :step => first_step, :active => true, :started_at => Time.now)
       [201, deploy.to_json]
     end
   end
