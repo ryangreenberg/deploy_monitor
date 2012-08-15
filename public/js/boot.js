@@ -12,12 +12,16 @@ App.prototype.boot = function() {
 };
 
 App.prototype.bootDomReady = function() {
-  this.activeDeploys = new ActiveDeploys($('.active-deploys'));
-  this.activeDeploys.startPeriodicUpdates();
-  this.recentDeploys = new RecentDeploys($('.recent-deploys'));
-  this.recentDeploys.startPeriodicUpdates();
+  if ($('.active-deploys').length) {
+    this.activeDeploys = new ActiveDeploys($('.active-deploys'));
+    this.activeDeploys.startPeriodicUpdates();
+  }
+
+  if ($('.recent-deploys').length) {
+    this.recentDeploys = new RecentDeploys($('.recent-deploys'));
+    this.recentDeploys.startPeriodicUpdates();
+  }
 };
 
 var app = new App();
 app.boot();
-
