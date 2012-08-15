@@ -7,6 +7,7 @@ class DeployMonitor::Web < Sinatra::Base
 
   get '/' do
     @systems = System.all
+    @active_deploys = Deploy.filter(:active => true).order(:started_at.desc)
     @past_deploys = Deploy.filter(:active => false).order(:finished_at.desc).limit(10)
     erb :index
   end
