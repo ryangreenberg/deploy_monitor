@@ -31,7 +31,7 @@ class DeployMonitor::Web < Sinatra::Base
   end
 
   get '/recent_deploys' do
-    updated_at = Time.at(params[:updated_at].to_i)
+    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - 10
     deploys = Deploy.filter(:active => false).
       where {|o| o.finished_at >= updated_at }.
       order(:finished_at.desc).
@@ -44,6 +44,45 @@ class DeployMonitor::Web < Sinatra::Base
     {
       :updated_at => Time.now.to_i,
       :deploy_html => deploy_htmls.join('')
+    }.to_json
+  end
+
+  get '/active_deploys' do
+    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - 10
+    new_deploys = Deploy.filter(:active => true).
+      where {|o| o.started_at >= updated_at }
+    # This should just return deploys that have progressed since the last updated at
+    continuing_deploys = Deploy.filter(:active => true).
+      where {|o| o.started_at < updated_at }
+    completed_deploys = Deploy.filter(:active => false).
+      where {|o| o.finished_at >= updated_at }
+
+    new_deploys_rsp = new_deploys.map do |deploy|
+      {
+        :id => deploy.id,
+        :html => partial(:active_deploy, :locals => {:deploy => deploy})
+      }
+    end
+
+    continuing_deploys_rsp = continuing_deploys.map do |deploy|
+      {
+        :id => deploy.id,
+        :current_progress => deploy.current_progress.step.description,
+        :progress_percentage => deploy.progress_percentage
+      }
+    end
+
+    completed_deploys_rsp = completed_deploys.map do |deploy|
+      {
+        :id => deploy.id
+      }
+    end
+
+    {
+      :updated_at => Time.now.to_i,
+      :new_deploys => new_deploys_rsp,
+      :continuing_deploys => continuing_deploys_rsp, #continuing_deploys.map {|ea| {:id => ea.id, :current_progress => ea.current_progress.step.description} },
+      :completed_deploys => completed_deploys_rsp #completed_deploys.map {|ea| ea.id}
     }.to_json
   end
 end
