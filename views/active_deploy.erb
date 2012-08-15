@@ -1,0 +1,26 @@
+<% system = deploy.system %>
+<div class="span6 active-deploy" data-deploy-id="<%= deploy.id %>">
+  <h2 class="system-name">
+    <%= system.name %>
+    <span class="status">
+      <a href="/deploys/<%= deploy.id %>">In progress</a> &middot;
+      <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="%M:%S"><%= format_hms("%M:%S", Time.now - deploy.started_at) %></span> ago</span>
+    </span>
+  </h2>
+
+  <div class="deploy-progress">
+    <% if deploy.current_progress %>
+      <h3 class="current-progress"><%= deploy.current_progress.step.description %>&hellip;</h3>
+    <% end %>
+
+    <div class="deploy-progress progress progress-striped active">
+      <div class="bar" style="width: <%= deploy.progress_percentage %>%;"></div>
+    </div>
+  </div>
+
+  <ul class="step-details" style="display: none">
+  <% deploy.system.steps.each do |step| %>
+    <li class="<%= deploy.at_step?(step) ? 'active' : '' %>"><%= step.description %></li>
+  <% end %>
+  </ul>
+</div>

@@ -1,37 +1,12 @@
-<div class="row" style="margin-bottom: 20px">
+<div class="row active-deploys" style="margin-bottom: 20px" data-updated-at="<%= Time.now.to_i %>">
   <h2 class="span12">Active Deploys</h2>
-<% @systems.each do |system| %>
-  <div class="span6 system">
-
-  <% deploy = system.active_deploy %>
-  <h2 class="system-name">
-    <%= system.name %>
-    <span class="status">
-    <% if deploy %>
-      <a href="/deploys/<%= deploy.id %>">In progress</a> &middot;
-      <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="%M:%S"><%= format_hms("%M:%S", Time.now - deploy.started_at) %></span> ago</span>
-    <% end %>
-    </span>
-  </h2>
-  <% if deploy %>
-  <% if deploy.current_progress %>
-    <h3 class="current-progress"><%= deploy.current_progress.step.description %>&hellip;</h3>
-  <% end %>
-
-  <div class="deploy-progress progress progress-striped active">
-    <div class="bar" style="width: <%= deploy.progress_percentage %>%;"></div>
-  </div>
-
-    <ul class="step-details" style="display: none">
-    <% deploy.system.steps.each do |step| %>
-      <li class="<%= deploy.at_step?(step) ? 'active' : '' %>"><%= step.description %></li>
-    <% end %>
-    </ul>
-  <% else %>
-    <h3>No deploy in progress</h3>
-  <% end %>
-  </div>
+<% @active_deploys.each do |deploy| %>
+  <%= partial(:active_deploy, :locals => {:deploy => deploy})%>
 <% end %>
+
+  <div id="no-active-deploys" class="span12 well" style="<%= 'display: none' unless @active_deploys.empty? %>">
+    There are currently no active deploys.
+  </div>
 </div>
 
 <div class="row">
