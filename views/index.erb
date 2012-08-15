@@ -1,10 +1,12 @@
 <div class="row active-deploys" style="margin-bottom: 20px" data-updated-at="<%= Time.now.to_i %>">
   <h2 class="span12">Active Deploys</h2>
-<% @active_deploys.each do |deploy| %>
-  <%= partial(:active_deploy, :locals => {:deploy => deploy})%>
-<% end %>
+  <div class="deploy-list">
+    <% @active_deploys.each do |deploy| %>
+      <%= partial(:active_deploy, :locals => {:deploy => deploy})%>
+    <% end %>
+  </div>
 
-  <div id="no-active-deploys" class="span12 well" style="<%= 'display: none' unless @active_deploys.empty? %>">
+  <div class="no-active-deploys span12 well" style="<%= 'display: none' unless @active_deploys.empty? %>">
     There are currently no active deploys.
   </div>
 </div>
