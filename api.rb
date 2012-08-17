@@ -189,6 +189,9 @@ class DeployMonitor::API < Sinatra::Base
     if step.nil?
       halt 400, "Cannot add unknown step '#{step_name}' to deploy"
     end
+    if deploy.at_step?(step)
+      halt 400, "Deploy is already at step '#{step_name}'"
+    end
 
     progress = DB.transaction do
       now = Time.now
