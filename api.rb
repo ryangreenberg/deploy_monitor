@@ -39,11 +39,7 @@ class DeployMonitor::API < Sinatra::Base
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     if system.nil?
-      if CONFIG['implicit_system_creation']
-        system = System.create(:name => system_name)
-      else
-        halt 404, "Cannot create new step for unknown system '#{system_name}'"
-      end
+      halt 404, "Cannot create new step for unknown system '#{system_name}'"
     end
 
     name = params[:name]
@@ -99,11 +95,7 @@ class DeployMonitor::API < Sinatra::Base
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     if system.nil?
-      if CONFIG['implicit_system_creation']
-        system = System.create(:name => system_name)
-      else
-        halt 404, "Cannot create new deploy for unknown system '#{system_name}'"
-      end
+      halt 404, "Cannot create new deploy for unknown system '#{system_name}'"
     end
 
     active_deploy = Deploy.active.filter(:system => system).first
@@ -195,16 +187,7 @@ class DeployMonitor::API < Sinatra::Base
     step_name = params[:step]
     step = Step.filter(:system => deploy.system, :name => step_name).first
     if step.nil?
-      if CONFIG['implicit_step_creation']
-        step_number = deploy.next_step_number
-        step = step.create(
-          :name => step_name,
-          :system => deploy.system,
-          :number => step_number
-        )
-      else
-        halt 400, "Cannot add unknown step '#{step_name}' to deploy"
-      end
+      halt 400, "Cannot add unknown step '#{step_name}' to deploy"
     end
 
     progress = DB.transaction do

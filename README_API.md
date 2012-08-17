@@ -18,8 +18,6 @@ To advance a deploy to another step, POST to /deploys/:deploy_id/step/:step_name
 
 To complete a deploy, POST to /deploys/:deploy_id/complete. You can provide a `result`, which can be complete or failed. The default is complete.
 
-New systems and deploy steps will be created when a deploy is created for an unknown system, or advanced to an unknown step. If you want to disable this feature, change the config values for implicit_system_creation and implicit_step_creation.
-
 ## API Endpoints ##
 
 ### `GET /systems`
