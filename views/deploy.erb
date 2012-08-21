@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row active-deploy" data-deploy-id="<%= @deploy.id %>">
   <h2 class="span12"><%= @deploy.system.name %> Deploy <%= @deploy.id %></h2>
 
   <div class="span12">
@@ -6,7 +6,7 @@
       <h2>
         <span class="status">
           In progress &middot;
-          <span class="started-at">Started <%= format_hms("%M:%S", Time.now - @deploy.started_at) %> ago</span>
+          <span class="started-at">Started <span class="timer" data-timestamp="<%= @deploy.started_at.to_i %>" data-format="%M:%S"><%= format_hms("%M:%S", @deploy.duration) %></span> ago</span>
         </span>
       </h2>
 
@@ -38,7 +38,15 @@
     <tr class="<%= progress.active ? 'active' : '' %>">
       <td><%= progress.step.name %></td>
       <td><%= progress.step.description %></td>
-      <td><%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %></td>
+      <td>
+        <% if progress.active %>
+        <span class="timer" data-timestamp="<%= progress.started_at.to_i %>" data-format="%Mm %Ss">
+          <%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %>
+        </span>
+        <% else %>
+        <%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %>
+        <% end %>
+      </td>
     </tr>
   <% end %>
   <% @future_steps.each do |step| %>
