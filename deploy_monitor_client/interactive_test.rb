@@ -16,17 +16,34 @@ unless system
   exit
 end
 
-puts "Steps:"
+deploy = nil
+begin
+  deploy = dm.start_deploy(system_name)
+  puts "Started new deploy id #{deploy.deploy_id}"
+rescue RestClient::BadRequest => e
+  puts "Error: #{e.response}"
+  print "Resume active deploy? [y/n] "
+  choice = STDIN.gets.strip.downcase
+  if choice == 'y'
+    deploy = dm.current_deploy(system_name)
+    puts "Resumed deploy #{deploy.deploy_id}"
+  else
+    exit(1)
+  end
+end
+
+puts "Steps to deploy #{system_name}:"
 system.steps.each_with_index {|ea, i| puts "#{i + 1}. #{ea.name}" }
 
 begin
-  deploy = dm.start_deploy(system_name)
-rescue RestClient::BadRequest => e
-  puts "Error: #{e.response}"
-end
+  completed_steps = deploy.progress.map {|ea| ea["step_id"] }
 
-begin
   system.steps.each do |step|
+    if completed_steps.include?(step.step_id)
+      "Skipping #{step.name} (already done)"
+      next
+    end
+
     while true do
       print "[F]ail deploy or [c]ontinue to #{step.name}? [continue] "
       choice = STDIN.gets.strip.downcase
