@@ -13,8 +13,8 @@
     this.$node.find('.timer').each(function () {
       var $this = $(this);
       var timestamp = $this.attr('data-timestamp');
-      var formatStr = $this.attr('data-format');
-      $(this).text(formatDuration("%M:%S", now - timestamp));
+      var formatStr = $this.attr('data-format') || "%M:%S";
+      $(this).text(formatDuration(formatStr, now - timestamp));
     });
   };
 
