@@ -4,6 +4,16 @@ module DeployMonitor
       @host = URI.parse(host)
     end
 
+    def get_systems
+      begin
+        rsp = RestClient.get "#{base_url}/systems"
+        systems = JSON.parse(rsp.body)["systems"]
+        systems.map {|ea| System.from_api(self, ea)}
+      rescue RestClient::ResourceNotFound => e
+        nil
+      end
+    end
+
     def get_system(name)
       begin
         rsp = RestClient.get "#{base_url}/systems/#{name}"
@@ -11,7 +21,6 @@ module DeployMonitor
       rescue RestClient::ResourceNotFound => e
         nil
       end
-
     end
 
     def create_system(name)
