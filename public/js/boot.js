@@ -21,6 +21,11 @@ App.prototype.bootDomReady = function() {
     this.recentDeploys = new RecentDeploys($('.recent-deploys'));
     this.recentDeploys.startPeriodicUpdates();
   }
+
+  if ($('.deploy.active').length) {
+    this.activeDeploy = new ActiveDeploy($('.deploy.active'));
+    this.activeDeploy.startPeriodicUpdates();
+  }
 };
 
 var app = new App();
