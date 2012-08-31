@@ -1,4 +1,4 @@
-<div class="row active-deploy" data-deploy-id="<%= @deploy.id %>">
+<div class="row deploy <%= "active" if @deploy.active %>" data-deploy-id="<%= @deploy.id %>">
   <h2 class="span12"><%= @deploy.system.name %> Deploy <%= @deploy.id %></h2>
 
   <div class="span12">
@@ -11,7 +11,9 @@
       </h2>
 
       <% if @deploy.current_progress %>
-        <h3 class="current-progress"><%= @deploy.current_progress.step.description %>&hellip;</h3>
+        <h3 class="current-progress-wrapper">
+          <span class="current-progress"><%= @deploy.current_progress.step.description %></span>&hellip;
+        </h3>
       <% end %>
 
       <div class="deploy-progress progress progress-striped active">
@@ -34,28 +36,18 @@
       </tr>
     </thead>
 
-  <% @deploy.progresses.each do |progress| %>
-    <tr class="<%= progress.active ? 'active' : '' %>">
-      <td><%= progress.step.name %></td>
-      <td><%= progress.step.description %></td>
-      <td>
-        <% if progress.active %>
-        <span class="timer" data-timestamp="<%= progress.started_at.to_i %>" data-format="%Mm %Ss">
-          <%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %>
-        </span>
-        <% else %>
-        <%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-  <% @future_steps.each do |step| %>
-  <tr>
-    <td><%= step.name %></td>
-    <td><%= step.description %></td>
-    <td></td>
-  </tr>
-  <% end %>
+    <tbody class="steps">
+      <% @deploy.progresses.each do |progress| %>
+        <%= partial(:deploy_progress_row, :locals => {
+          :progress => progress
+        }) %>
+      <% end %>
+      <% @future_steps.each do |step| %>
+        <%= partial(:deploy_step_row, :locals => {
+          :step => step
+        }) %>
+      <% end %>
+    </tbody>
   </table>
 
 </div>
