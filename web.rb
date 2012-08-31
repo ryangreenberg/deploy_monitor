@@ -1,3 +1,5 @@
+require 'ruby-debug'
+
 class DeployMonitor::Web < Sinatra::Base
   include TimeUtils
   include ViewsHelpers
@@ -41,6 +43,42 @@ class DeployMonitor::Web < Sinatra::Base
       :updated_at => Time.now.to_i,
       :deploy_html => deploy_htmls.join('')
     }.to_json
+  end
+
+  get '/active_deploy' do
+    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - 10
+    deploy = Deploy[params[:id]]
+    halt 404 unless deploy
+
+    rsp = {
+      :updated_at => Time.now.to_i
+    }
+
+    has_new_progress = !Progress.filter(:deploy => deploy).where {|o| o.updated_at > updated_at}.empty?
+    if has_new_progress
+      progress_rsp = deploy.progresses.map do |progress|
+        {
+          :id => progress.id,
+          :html => partial(:deploy_progress_row, :locals => {:progress => progress})
+        }
+      end
+      future_steps_rsp = deploy.future_steps.map do |step|
+        {
+          :id => step.id,
+          :html => partial(:deploy_step_row, :locals => {:step => step})
+        }
+      end
+
+      rsp[:deploy_steps] = progress_rsp + future_steps_rsp
+      if deploy.active
+        rsp[:current_progress] = deploy.current_progress.step.description
+        rsp[:progress_percentage] = deploy.progress_percentage
+      else
+        rsp[:deploy_overview] = partial(:deploy_overview_inactive, :locals => {:deploy => deploy})
+      end
+    end
+
+    rsp.to_json
   end
 
   get '/active_deploys' do
