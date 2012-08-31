@@ -100,18 +100,26 @@ class DeployMonitor::API < Sinatra::Base
 
     active_deploy = Deploy.active.filter(:system => system).first
     if active_deploy
-      [400, "Cannot create new deploy for '#{system_name}' because deploy id #{active_deploy.id} is active"]
-    else
+      halt 400, "Cannot create new deploy for '#{system_name}' because deploy id #{active_deploy.id} is active"
+    end
+
+    first_step = Step.filter(:system => system).order(:number.asc).first
+    unless first_step
+      halt 400, "Cannot create new deploy for '#{system_name}' because there are no steps"
+    end
+
+    deploy = DB.transaction do
       deploy = Deploy.create(
         :active => true,
         :system => system,
         :started_at => Time.now
       )
-      first_step = Step.filter(:system => system).order(:number.asc).first
       # TODO: This seems like it could be better exposed as a class method on Progress
       progress = Progress.create(:deploy => deploy, :step => first_step, :active => true, :started_at => Time.now)
-      [201, deploy.to_json]
+      deploy
     end
+
+    [201, deploy.to_json]
   end
 
   get '/deploys/:deploy_id' do
