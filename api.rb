@@ -5,7 +5,7 @@ class DeployMonitor::API < Sinatra::Base
   end
 
   get '/systems' do
-    {:systems => System.all }.to_json
+    {:systems => System.all.map {|ea| ea.to_hash(:include_steps => true)} }.to_json
   end
 
   post '/systems' do
