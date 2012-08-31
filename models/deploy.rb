@@ -30,29 +30,41 @@ class Deploy < Sequel::Model
   end
   include Result
 
-  # Returns the number of the current progress associated with this deploy + 1
-  def next_step_number
-    progress = current_progress
-    progress ? current_progress.step.number + 1 : 0
-  end
-
-  def current_progress
-    Progress.filter(:deploy => self, :active => true).first
-  end
-
-  def at_step?(step)
-    current_progress && current_progress.step == step
-  end
-
-  def progress_percentage
-    if active
-      if current_progress
-        system.steps.index(current_progress.step) / system.steps.size.to_f * 100
+  module Steps
+    # Get steps after the last progress for this deploy
+    def future_steps
+      if active
+        Step.filter(:system => system).where{ |o| o.number >= next_step_number}
       else
-        0
+        []
+      end
+    end
+
+    # Returns the number of the current progress associated with this deploy + 1
+    def next_step_number
+      progress = current_progress
+      progress ? current_progress.step.number + 1 : 0
+    end
+
+    def current_progress
+      Progress.filter(:deploy => self, :active => true).first
+    end
+
+    def at_step?(step)
+      current_progress && current_progress.step == step
+    end
+
+    def progress_percentage
+      if active
+        if current_progress
+          system.steps.index(current_progress.step) / system.steps.size.to_f * 100
+        else
+          0
+        end
       end
     end
   end
+  include Steps
 
   def duration
     if started_at && finished_at
