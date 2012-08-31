@@ -4,11 +4,16 @@ $:.unshift("./lib")
 require 'deploy_monitor'
 
 HOST = 'http://localhost:4567'
+dm = DeployMonitor::Client.new(HOST)
+
+systems = dm.get_systems
+puts "Available systems:"
+systems.each_with_index do |ea, i|
+  puts "#{i + 1}. #{ea.name}"
+end
 
 print "Enter system name: "
 system_name = STDIN.gets.strip
-
-dm = DeployMonitor::Client.new(HOST)
 system = dm.get_system(system_name)
 
 unless system
