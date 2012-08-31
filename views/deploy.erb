@@ -1,29 +1,11 @@
 <div class="row deploy <%= "active" if @deploy.active %>" data-deploy-id="<%= @deploy.id %>">
   <h2 class="span12"><%= @deploy.system.name %> Deploy <%= @deploy.id %></h2>
 
-  <div class="span12">
+  <div class="span12 deploy-overview">
     <% if @deploy.active %>
-      <h2>
-        <span class="status">
-          In progress &middot;
-          <span class="started-at">Started <span class="timer" data-timestamp="<%= @deploy.started_at.to_i %>" data-format="%M:%S"><%= format_hms("%M:%S", @deploy.duration) %></span> ago</span>
-        </span>
-      </h2>
-
-      <% if @deploy.current_progress %>
-        <h3 class="current-progress-wrapper">
-          <span class="current-progress"><%= @deploy.current_progress.step.description %></span>&hellip;
-        </h3>
-      <% end %>
-
-      <div class="deploy-progress progress progress-striped active">
-        <div class="bar" style="width: <%= @deploy.progress_percentage %>%;"></div>
-      </div>
+      <%= partial(:deploy_overview_active, :locals => {:deploy => @deploy }) %>
     <% else %>
-      <h3><%= @deploy.status_label.to_s.capitalize %> in <%= format_hms("(%?Hh) %Mm %Ss", @deploy.duration) %></h3>
-      <div class="deploy-progress progress <%= @deploy.complete? ? 'progress-success' : 'progress-danger' %>">
-        <div class="bar" style="width: 100%;"></div>
-      </div>
+      <%= partial(:deploy_overview_inactive, :locals => {:deploy => @deploy }) %>
     <% end %>
   </div>
 
