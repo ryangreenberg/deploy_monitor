@@ -134,24 +134,9 @@ class DeployMonitor::API < Sinatra::Base
     deploy = Deploy[deploy_id]
     halt 404, "Deploy #{deploy_id} could not be found" unless deploy
 
-    # TODO: This metadata management would be better as a method on Deploy
     exclude_from_metadata = ['captures', 'splat', 'deploy_id']
     metadata_params = params.reject {|k, v| exclude_from_metadata.include?(k)}
-
-    metadata = if deploy.metadata
-      JSON.parse(deploy.metadata)
-    else
-      {}
-    end
-    metadata_params.each do |k, v|
-      if v =~ /null/i
-        metadata.delete(k)
-      else
-        metadata[k] = v
-      end
-    end
-
-    deploy.metadata = JSON.dump(metadata)
+    deploy.multiset_metadata(metadata_params) unless metadata_params.empty?
     deploy.save
 
     deploy.to_json

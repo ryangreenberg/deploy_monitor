@@ -1,3 +1,5 @@
+require 'json'
+
 class Deploy < Sequel::Model
   many_to_one :system
   one_to_many :progresses
@@ -76,6 +78,52 @@ class Deploy < Sequel::Model
     end
   end
 
+  module Metadata
+    def metadata
+      @metadata ||= load_metadata_from_db
+    end
+
+    def load_metadata_from_db
+      return {} unless values[:metadata]
+      begin
+        JSON.parse(values[:metadata])
+      rescue JSON::ParserError => e
+        {}
+      end
+    end
+
+    def set_metadata(key, value)
+      changed_columns << :metadata unless changed_columns.include?(:metadata)
+      metadata[key.to_s] = value
+    end
+
+    def remove_metadata(key)
+      metadata.delete(key.to_s)
+    end
+
+    def get_metadata(key)
+      metadata[key.to_s]
+    end
+
+    def multiset_metadata(hsh)
+      hsh.each do |key, value|
+        if value =~ /null/i
+          remove_metadata(key)
+        else
+          set_metadata(key, value)
+        end
+      end
+    end
+
+    def before_save
+      super
+      if changed_columns.include?(:metadata)
+        values[:metadata] = JSON.dump(@metadata)
+      end
+    end
+  end
+  include Metadata
+
   module Representation
     def to_hash(options = {})
       hsh = values.dup
@@ -100,7 +148,7 @@ class Deploy < Sequel::Model
       hsh[:progress] = progresses.map {|ea| ea.to_hash}
 
       # Provide metadata
-      hsh[:metadata] = hsh[:metadata] ? JSON.parse(hsh[:metadata]) : {}
+      hsh[:metadata] = metadata
 
       hsh
     end
