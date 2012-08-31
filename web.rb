@@ -15,11 +15,7 @@ class DeployMonitor::Web < Sinatra::Base
   get '/deploys/:deploy_id' do
     @deploy = Deploy[params[:deploy_id]]
     halt 404 unless @deploy
-    @future_steps = if @deploy.active
-      Step.filter(:system => @deploy.system).where{ |o| o.number >= @deploy.next_step_number}
-    else
-      []
-    end
+    @future_steps = @deploy.future_steps
     erb :deploy
   end
 
