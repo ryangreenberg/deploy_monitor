@@ -167,6 +167,7 @@ class DeployMonitor::API < Sinatra::Base
       Progress.filter(:deploy => deploy, :active => true).update(
         :active => false,
         :finished_at => now,
+        :updated_at => Sequel.function(:NOW),
         :result => result
       )
       deploy.active = false
@@ -198,6 +199,7 @@ class DeployMonitor::API < Sinatra::Base
       Progress.filter(:deploy => deploy, :active => true).update(
         :active => false,
         :finished_at => now,
+        :updated_at => Sequel.function(:NOW),
         :result => Models::RESULTS[:complete]
       )
       Progress.create(:deploy => deploy, :step => step, :active => true, :started_at => now)
