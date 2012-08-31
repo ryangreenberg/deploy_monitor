@@ -23,7 +23,13 @@
     var m = Math.floor((secs - (h * 3600)) / 60);
     var s = secs - (h * 3600) - (m * 60);
 
-    return formatStr.replace(/%H/, h).replace(/%M/, m).replace(/%S/, padWithZeros(s, 2));
+    return formatStr
+      .replace(/%H/, padWithZeros(h, 2))
+      .replace(/%M/, padWithZeros(m, 2))
+      .replace(/%S/, padWithZeros(s, 2))
+      .replace(/%h/, h)
+      .replace(/%m/, m)
+      .replace(/%s/, s);
   }
 
   function padWithZeros(n, digits) {
