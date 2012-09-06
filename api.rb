@@ -32,7 +32,7 @@ class DeployMonitor::API < Sinatra::Base
     system = System.filter(:name => system_name).first
     halt 404, "Unknown system '#{system_name}'" unless system
 
-    {:steps => Step.filter(:system => system).all }.to_json
+    {:steps => system.steps }.to_json
   end
 
   post '/:system/steps' do

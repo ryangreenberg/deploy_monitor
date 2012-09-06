@@ -1,5 +1,5 @@
 class System < Sequel::Model
-  one_to_many :steps
+  one_to_many :steps, :order => :number.asc
   one_to_many :deploys
 
   def active_deploy
@@ -15,7 +15,7 @@ class System < Sequel::Model
   def to_hash(options = {})
     hsh = values
     if options[:include_steps]
-      hsh[:steps] = steps.sort_by {|ea| ea.number || 0}.map {|ea| ea.to_hash}
+      hsh[:steps] = steps.map {|ea| ea.to_hash}
     end
     hsh
   end

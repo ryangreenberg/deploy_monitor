@@ -36,7 +36,7 @@ class Deploy < Sequel::Model
     # Get steps after the last progress for this deploy
     def future_steps
       if active
-        Step.filter(:system => system).where{ |o| o.number >= next_step_number}
+        Step.filter(:system => system).where{ |o| o.number >= next_step_number}.order(:number.asc)
       else
         []
       end
