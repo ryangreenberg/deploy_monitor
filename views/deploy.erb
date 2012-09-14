@@ -22,7 +22,7 @@
       <% @deploy.metadata.each do |k, v|%>
       <tr>
         <td><%== k %></th>
-        <td><%== v %></th>
+        <td><%= format_metadata_value(v) %></th>
       </tr>
       <% end %>
     </tbody>

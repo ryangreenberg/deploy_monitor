@@ -10,7 +10,6 @@ gem 'maruku', '0.6.0'
 gem 'erubis', '~> 2.7.0'
 # gem 'thin', '~> 1.4.1'
 
-
 group :development, :test do
   gem 'minitest'
   gem 'rake'
