@@ -62,10 +62,12 @@ begin
 
     deploy.progress_to(step.name)
   end
+
+  print "Enter to complete deploy "
+  STDIN.gets
+  deploy.complete
+
 rescue Interrupt => e
+  puts "Marking deploy as failed"
   deploy.fail
 end
-
-print "Enter to complete deploy "
-STDIN.gets
-deploy.complete
