@@ -9,9 +9,11 @@ gem 'mysql', '~> 2.8.1'
 gem 'maruku', '0.6.0'
 gem 'erubis', '~> 2.7.0'
 # gem 'thin', '~> 1.4.1'
-# gem 'erubis', '~> 2.7.0'
 
-group :development do
+
+group :development, :test do
+  gem 'minitest'
+  gem 'rake'
   gem 'ruby-debug'
 end
 
