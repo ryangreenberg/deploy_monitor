@@ -9,6 +9,26 @@
     <% end %>
   </div>
 
+  <% if @deploy.has_metadata? %>
+  <table class="span12 table table-bordered">
+    <thead>
+      <tr>
+        <th class="span3">Key</th>
+        <th class="span9">Value</th>
+      </tr>
+    </thead>
+
+    <tbody class="">
+      <% @deploy.metadata.each do |k, v|%>
+      <tr>
+        <td><%== k %></th>
+        <td><%== v %></th>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% end %>
+
   <table class="span12 table table-bordered">
     <thead>
       <tr>
