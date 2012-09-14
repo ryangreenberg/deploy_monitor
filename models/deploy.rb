@@ -83,6 +83,10 @@ class Deploy < Sequel::Model
       @metadata ||= load_metadata_from_db
     end
 
+    def has_metadata?
+      !metadata.empty?
+    end
+
     def load_metadata_from_db
       return {} unless values[:metadata]
       begin
@@ -107,7 +111,7 @@ class Deploy < Sequel::Model
 
     def multiset_metadata(hsh)
       hsh.each do |key, value|
-        if value =~ /null/i
+        if value.strip.empty?
           remove_metadata(key)
         else
           set_metadata(key, value)
