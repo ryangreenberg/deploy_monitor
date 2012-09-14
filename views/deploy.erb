@@ -1,5 +1,5 @@
 <div class="row deploy <%= "active" if @deploy.active %>" data-deploy-id="<%= @deploy.id %>">
-  <h2 class="span12"><%= @deploy.system.name %> Deploy <%= @deploy.id %></h2>
+  <h2 class="span12"><%== @deploy.system.name %> Deploy <%= @deploy.id %></h2>
 
   <div class="span12 deploy-overview">
     <% if @deploy.active %>

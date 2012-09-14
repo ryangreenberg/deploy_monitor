@@ -1,8 +1,8 @@
 <tr class="<%= progress.active ? 'active' : '' %>">
-  <td><%= progress.step.description %></td>
+  <td><%== progress.step.description %></td>
   <td>
     <% if progress.active %>
-    <span class="timer" data-timestamp="<%= progress.started_at.to_i %>" data-format="%Mm %Ss">
+    <span class="timer" data-timestamp="<%= progress.started_at.to_i %>" data-format="(%?Hh) %Mm %Ss">
       <%= format_hms("(%?Hh) %Mm %Ss", progress.duration) %>
     </span>
     <% else %>

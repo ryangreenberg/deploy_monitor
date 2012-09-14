@@ -1,6 +1,6 @@
 <tr>
   <% if include_system %>
-  <td><a href ="/systems/<%= deploy.system.name %>"><%= deploy.system.name %></a></td>
+  <td><a href ="/systems/<%== deploy.system.name %>"><%== deploy.system.name %></a></td>
   <% end %>
   <td><a href="/deploys/<%= deploy.id %>"><%= deploy.id %></a></td>
   <td>
