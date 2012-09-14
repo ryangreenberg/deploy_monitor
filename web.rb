@@ -1,4 +1,4 @@
-require 'ruby-debug'
+require 'erubis'
 
 class DeployMonitor::Web < Sinatra::Base
   include TimeUtils
