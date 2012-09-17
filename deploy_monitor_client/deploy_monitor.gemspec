@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["greenberg@twitter.com"]
   gem.description   = "Command-line client and Ruby client for Deploy Monitor"
   gem.summary       = "Client to connect to Deploy Monitor"
-  gem.homepage      = ''
+  gem.homepage      = 'http://github.com/ryangreenberg/deploy_monitor'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
