@@ -195,7 +195,10 @@ class DeployMonitor::API < Sinatra::Base
         :updated_at => now,
         :result => Models::RESULTS[:complete]
       )
-      Progress.create(:deploy => deploy, :step => step, :active => true, :started_at => now)
+      progress = Progress.create(:deploy => deploy, :step => step, :active => true, :started_at => now)
+      deploy.add_progress(progress)
+      deploy.save
+      progress
     end
 
     [201, progress.to_json]
