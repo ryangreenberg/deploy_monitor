@@ -3,14 +3,14 @@ module DeployMonitor
 
     class UnknownDeployStep < ArgumentError; end
 
-    attr_accessor :deploy_id, :deploy_monitor, :active, :progress, :metadata
+    attr_accessor :deploy_id, :client, :active, :progress, :metadata
 
     TIMESTAMPS = [:created_at, :updated_at, :started_at, :finished_at]
     attr_accessor *TIMESTAMPS
 
-    def self.from_api(deploy_monitor, api_obj)
+    def self.from_api(client, api_obj)
       deploy = self.new
-      deploy.deploy_monitor = deploy_monitor
+      deploy.client = client
       deploy.update_from_api(api_obj)
       deploy
     end
@@ -29,7 +29,7 @@ module DeployMonitor
 
     def progress_to(step, description = nil)
       begin
-        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/step/#{step}", {:description => description}
+        RestClient.post "#{client.base_url}/deploys/#{deploy_id}/step/#{step}", {:description => description}
         true
       rescue RestClient::BadRequest => e
         raise UnknownDeployStep, e.response
@@ -38,7 +38,7 @@ module DeployMonitor
 
     def fail
       begin
-        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete", {:result => :failed}
+        RestClient.post "#{client.base_url}/deploys/#{deploy_id}/complete", {:result => :failed}
         true
       rescue RestClient::Exception
         false
@@ -47,7 +47,7 @@ module DeployMonitor
 
     def complete
       begin
-        RestClient.post "#{deploy_monitor.base_url}/deploys/#{deploy_id}/complete", {}
+        RestClient.post "#{client.base_url}/deploys/#{deploy_id}/complete", {}
         true
       rescue RestClient::Exception
         false

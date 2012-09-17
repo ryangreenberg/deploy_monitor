@@ -1,10 +1,10 @@
 module DeployMonitor
   class System
-    attr_accessor :deploy_monitor, :system_id, :name, :steps
+    attr_accessor :client, :system_id, :name, :steps
 
-    def self.from_api(deploy_monitor, api_obj)
+    def self.from_api(client, api_obj)
       system = self.new
-      system.deploy_monitor = deploy_monitor
+      system.client = client
       system.update_from_api(api_obj)
       system
     end
@@ -12,7 +12,7 @@ module DeployMonitor
     def update_from_api(api_obj)
       self.system_id = api_obj['id']
       self.name = api_obj['name']
-      self.steps = api_obj['steps'].map {|ea| Step.from_api(deploy_monitor, ea)}
+      self.steps = api_obj['steps'].map {|ea| Step.from_api(client, ea)}
     end
   end
 end

@@ -1,10 +1,10 @@
 module DeployMonitor
   class Step
-    attr_accessor :deploy_monitor, :step_id, :name, :description, :number
+    attr_accessor :client, :step_id, :name, :description, :number
 
-    def self.from_api(deploy_monitor, api_obj)
+    def self.from_api(client, api_obj)
       step = self.new
-      step.deploy_monitor = deploy_monitor
+      step.client = client
       step.update_from_api(api_obj)
       step
     end
