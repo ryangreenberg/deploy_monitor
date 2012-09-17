@@ -18,7 +18,16 @@ class Progress < Sequel::Model
   end
 
   def to_hash(options = {})
-    values
+    hsh = values.dup
+
+    # Use integer timestamps
+    [:created_at, :updated_at, :started_at, :finished_at].each do |ts_field|
+      if hsh[ts_field]
+        hsh[ts_field] = hsh[ts_field].to_i
+      end
+    end
+
+    hsh
   end
 
   def to_json(options = {})
