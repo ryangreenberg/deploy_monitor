@@ -2,11 +2,10 @@ module DeployMonitor
   class Deploy
 
     class UnknownDeployStep < ArgumentError; end
-
-    attr_accessor :deploy_id, :client, :active, :progress, :metadata
-
     TIMESTAMPS = [:created_at, :updated_at, :started_at, :finished_at]
-    attr_accessor *TIMESTAMPS
+
+    attr_accessor :client, :system
+    attr_reader :active, :progress, :metadata, *TIMESTAMPS
 
     def self.from_api(client, api_obj)
       deploy = self.new
@@ -16,20 +15,34 @@ module DeployMonitor
     end
 
     def update_from_api(api_obj)
-      self.deploy_id = api_obj['id']
-      self.active = api_obj['active']
-      self.progress = api_obj['progress']
-      self.metadata = api_obj['metadata']
+      @deploy_id = api_obj['id']
+      @active = api_obj['active']
+      @progress = api_obj['progress']
+      @metadata = api_obj['metadata']
 
-      self.created_at = api_obj['created_at'] ? Time.at(api_obj['created_at']) : nil
-      self.updated_at = api_obj['updated_at'] ? Time.at(api_obj['updated_at']) : nil
-      self.started_at = api_obj['started_at'] ? Time.at(api_obj['started_at']) : nil
-      self.finished_at = api_obj['finished_at'] ? Time.at(api_obj['finished_at']) : nil
+      @created_at = api_obj['created_at'] ? Time.at(api_obj['created_at']) : nil
+      @updated_at = api_obj['updated_at'] ? Time.at(api_obj['updated_at']) : nil
+      @started_at = api_obj['started_at'] ? Time.at(api_obj['started_at']) : nil
+      @finished_at = api_obj['finished_at'] ? Time.at(api_obj['finished_at']) : nil
+    end
+
+    def update_from_json(json)
+      begin
+        api_obj = JSON.parse(json)
+        update_from_api(api_obj)
+      rescue JSON::ParserError => e
+      end
+    end
+
+    def refresh_self
+      update_from_json(RestClient.get("#{@client.base_url}/deploys/#{@deploy_id}"))
     end
 
     def progress_to(step, description = nil)
       begin
-        RestClient.post "#{client.base_url}/deploys/#{deploy_id}/step/#{step}", {:description => description}
+        RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/step/#{step}",
+          {:description => description})
+        refresh_self
         true
       rescue RestClient::BadRequest => e
         raise UnknownDeployStep, e.response
@@ -38,7 +51,9 @@ module DeployMonitor
 
     def fail
       begin
-        RestClient.post "#{client.base_url}/deploys/#{deploy_id}/complete", {:result => :failed}
+        rsp = RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/complete",
+          {:result => :failed})
+        update_from_json(rsp)
         true
       rescue RestClient::Exception
         false
@@ -47,7 +62,8 @@ module DeployMonitor
 
     def complete
       begin
-        RestClient.post "#{client.base_url}/deploys/#{deploy_id}/complete", {}
+        rsp = RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/complete", {})
+        update_from_json(rsp)
         true
       rescue RestClient::Exception
         false
