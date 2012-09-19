@@ -96,12 +96,17 @@ class Deploy < Sequel::Model
       end
     end
 
-    def set_metadata(key, value)
+    def mark_metadata_as_changed
       changed_columns << :metadata unless changed_columns.include?(:metadata)
+    end
+
+    def set_metadata(key, value)
+      mark_metadata_as_changed
       metadata[key.to_s] = value
     end
 
     def remove_metadata(key)
+      mark_metadata_as_changed
       metadata.delete(key.to_s)
     end
 
