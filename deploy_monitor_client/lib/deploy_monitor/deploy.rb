@@ -49,6 +49,18 @@ module DeployMonitor
       end
     end
 
+    # Updates deploy to associate all keys in +hsh+ with the provided values.
+    # If you want to delete a key, set its value to nil.
+    def update_metadata(hsh)
+      begin
+        rsp = RestClient.put("#{@client.base_url}/deploys/#{@deploy_id}", hsh)
+        update_from_json(rsp)
+        true
+      rescue RestClient::Exception
+        false
+      end
+    end
+
     def fail
       begin
         rsp = RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/complete",
