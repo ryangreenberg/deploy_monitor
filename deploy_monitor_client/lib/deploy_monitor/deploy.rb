@@ -1,7 +1,8 @@
 module DeployMonitor
   class Deploy
+    include DeployMonitor::ApiObject
+    include DeployMonitor::ApiErrors
 
-    class UnknownDeployStep < ArgumentError; end
     TIMESTAMPS = [:created_at, :updated_at, :started_at, :finished_at]
 
     attr_accessor :client, :system
@@ -45,7 +46,8 @@ module DeployMonitor
         refresh_self
         true
       rescue RestClient::BadRequest => e
-        raise UnknownDeployStep, e.response
+        error = parse_error(e.response)
+        raise error ? error.to_exception : e
       end
     end
 

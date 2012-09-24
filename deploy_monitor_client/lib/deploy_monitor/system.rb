@@ -1,6 +1,7 @@
 module DeployMonitor
   class System
     include DeployMonitor::ApiObject
+    include DeployMonitor::ApiErrors
 
     attr_accessor :client, :system_id, :name, :steps
 
@@ -20,9 +21,12 @@ module DeployMonitor
     def start_deploy
       begin
         rsp = RestClient.post("#{base_url}/#{name}/deploys", {})
-        Deploy.from_api(self.client, JSON.parse(rsp.body))
+        deploy = Deploy.from_api(self.client, JSON.parse(rsp.body))
+        deploy.system = self
+        deploy
       rescue RestClient::BadRequest => e
-        raise e, e.response
+        error = parse_error(e.response)
+        raise error ? error.to_exception : e
       end
     end
 
@@ -32,7 +36,9 @@ module DeployMonitor
       if deploys.empty?
         nil
       else
-        Deploy.from_api(self.client, deploys.first)
+        deploy = Deploy.from_api(self.client, deploys.first)
+        deploy.system = self
+        deploy
       end
     end
   end
