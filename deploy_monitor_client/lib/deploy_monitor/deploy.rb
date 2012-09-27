@@ -63,7 +63,7 @@ module DeployMonitor
       end
     end
 
-    def fail
+    def fail!
       begin
         rsp = RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/complete",
           {:result => :failed})
@@ -74,7 +74,7 @@ module DeployMonitor
       end
     end
 
-    def complete
+    def complete!
       begin
         rsp = RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/complete", {})
         update_from_json(rsp)

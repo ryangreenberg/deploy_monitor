@@ -53,7 +53,7 @@ begin
       print "[F]ail deploy or [c]ontinue to #{step.name}? [continue] "
       choice = STDIN.gets.strip.downcase
       if choice == 'f'
-        deploy.fail
+        deploy.fail!
         exit
       else
         break
@@ -65,9 +65,9 @@ begin
 
   print "Enter to complete deploy "
   STDIN.gets
-  deploy.complete
+  deploy.complete!
 
 rescue Interrupt => e
   puts "Marking deploy as failed"
-  deploy.fail
+  deploy.fail!
 end
