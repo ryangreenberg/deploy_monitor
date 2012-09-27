@@ -6,7 +6,7 @@ module DeployMonitor
     TIMESTAMPS = [:created_at, :updated_at, :started_at, :finished_at]
 
     attr_accessor :client, :system
-    attr_reader :active, :progress, :metadata, *TIMESTAMPS
+    attr_reader :deploy_id, :active, :progress, :metadata, *TIMESTAMPS
 
     def self.from_api(client, api_obj)
       deploy = self.new
@@ -49,6 +49,11 @@ module DeployMonitor
         error = parse_error(e.response)
         raise error ? error.to_exception : e
       end
+    end
+
+    def steps
+      # This will raise NoMethodError if deploy was loaded via Client#find_by_id
+      system.steps
     end
 
     # Updates deploy to associate all keys in +hsh+ with the provided values.

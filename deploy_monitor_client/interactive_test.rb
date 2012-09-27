@@ -6,7 +6,7 @@ require 'deploy_monitor'
 HOST = 'http://localhost:4567'
 dm = DeployMonitor::Client.new(HOST)
 
-systems = dm.get_systems
+systems = dm.all_systems
 puts "Available systems:"
 systems.each_with_index do |ea, i|
   puts "#{i + 1}. #{ea.name}"
@@ -14,7 +14,7 @@ end
 
 print "Enter system name: "
 system_name = STDIN.gets.strip
-system = dm.get_system(system_name)
+system = dm.find_system_by_name(system_name)
 
 unless system
   puts "#{system_name} does not exist."
@@ -23,14 +23,14 @@ end
 
 deploy = nil
 begin
-  deploy = dm.start_deploy(system_name)
+  deploy = system.start_deploy
   puts "Started new deploy id #{deploy.deploy_id}"
-rescue RestClient::BadRequest => e
-  puts "Error: #{e.response}"
+rescue DeployMonitor::Error::DeployInProgress => e
+  puts "DeployMonitor::Error::DeployInProgress"
   print "Resume active deploy? [y/n] "
   choice = STDIN.gets.strip.downcase
   if choice == 'y'
-    deploy = dm.current_deploy(system_name)
+    deploy = system.current_deploy
     puts "Resumed deploy #{deploy.deploy_id}"
   else
     exit(1)

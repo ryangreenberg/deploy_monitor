@@ -4,7 +4,7 @@ module DeployMonitor
       @host = URI.parse(host)
     end
 
-    def get_systems
+    def all_systems
       begin
         rsp = RestClient.get "#{base_url}/systems"
         systems = JSON.parse(rsp.body)["systems"]
@@ -14,7 +14,7 @@ module DeployMonitor
       end
     end
 
-    def get_system(name)
+    def find_system_by_name(name)
       begin
         rsp = RestClient.get "#{base_url}/systems/#{name}"
         System.from_api(self, JSON.parse(rsp.body))
@@ -27,7 +27,7 @@ module DeployMonitor
       RestClient.post "#{base_url}/systems", {:name => name}
     end
 
-    def get_deploy(id)
+    def find_deploy_by_id(id)
       begin
         rsp = RestClient.get "#{base_url}/deploys/#{id}"
         Deploy.from_api(self, JSON.parse(rsp.body))
