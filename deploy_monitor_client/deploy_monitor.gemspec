@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'json'
   gem.add_runtime_dependency 'rest-client'
+  gem.add_runtime_dependency 'highline'
 
 	gem.add_development_dependency "twitter_gem_utils", "~> 0.3.1"
 end

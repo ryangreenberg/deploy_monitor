@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby -KU
+require 'deploy_monitor'
+require 'deploy_monitor/cli'
+
+cli = DeployMonitor::CLI.new
+cli.parse(ARGV)
+begin
+  cli.start_interactive_session
+rescue Interrupt => e
+  puts ""
+end
