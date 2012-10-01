@@ -1,9 +1,10 @@
 require 'errors'
 
 class DeployMonitor::API < Sinatra::Base
+  API_DOCS = Maruku.new(File.read("README_API.md")).to_html
+
   get '/' do
-    docs = Maruku.new(File.read("README_API.md")).to_html
-    erb docs
+    erb API_DOCS
   end
 
   get '/systems' do
