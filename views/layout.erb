@@ -13,9 +13,22 @@
   <script src="/js/boot.js"></script>
 </head>
 <body>
+
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand active" href="/">Deploy Monitor</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li><a href="/api">API</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
-    <h1 id="header"><a href="/">Deploy Monitor</a></h1>
-<%= yield %>
+    <%= yield %>
   </div>
 </body>
 </html>

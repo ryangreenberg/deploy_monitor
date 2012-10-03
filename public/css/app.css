@@ -1,3 +1,8 @@
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
 #header {
   margin: 20px 0px 10px 0px;
 }
@@ -16,7 +21,3 @@
 table tr.active {
   color: #00c;
 }
-
-/*.deploy-progress {
-  margin-bottom: 4px;
-}*/
