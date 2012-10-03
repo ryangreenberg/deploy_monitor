@@ -1,3 +1,8 @@
+<form class="abort-form" method="POST" action="/api/deploys/<%== deploy.id %>/complete">
+  <input type="hidden" name="result" value="failed">
+  <input class="btn btn-danger" type="submit" value="Abort Deploy">
+</form>
+
 <h2>
   <span class="status">
     In progress &middot;

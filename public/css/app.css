@@ -35,3 +35,7 @@ tr > *:first-child {
 .section-header, .deploy-overview {
   margin-bottom: 8px;
 }
+
+.abort-form {
+  float: right;
+}
