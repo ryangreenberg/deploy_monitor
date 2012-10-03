@@ -1,13 +1,12 @@
 ## Ruby API ##
-deploy_monitor = DeployMonitor::Client.new('http://localhost:4567')
-current_deploy = deploy_monitor.current_deploy(:peacock)
-deploy = deploy_monitor.start_deploy(:peacock)
+client = DeployMonitor::Client.new('http://localhost:4567')
+sys = client.find_system_by_name(:frontend)
+deploy = sys.current_deploy
 deploy.progress # => [ ... ]
-deploy.progress_to(:rpsec_tests, "Running RSpec Ruby tests")
-deploy.progress_to(:jshint, "Running RSpec Ruby tests")
-deploy.complete
-deploy.fail
-
+deploy.progress_to(:jshint)
+deploy.progress_to(:rspec_tests)
+deploy.complete!
+deploy.fail!
 
 ## Sample Usage ##
 deploy_monitor = DeployMonitor.new('http://localhost:4567')
