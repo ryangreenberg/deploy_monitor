@@ -1,30 +1,50 @@
+## Installation ##
+
+    gem install deploy_monitor
+
 ## Ruby API ##
-client = DeployMonitor::Client.new('http://localhost:4567')
-sys = client.find_system_by_name(:frontend)
-deploy = sys.current_deploy
-deploy.progress # => [ ... ]
-deploy.progress_to(:jshint)
-deploy.progress_to(:rspec_tests)
-deploy.complete!
-deploy.fail!
+
+    client = DeployMonitor::Client.new('http://localhost:4567')
+    sys = client.find_system_by_name(:frontend)
+    deploy = sys.current_deploy
+    deploy.progress # => [ ... ]
+    deploy.progress_to(:jshint)
+    deploy.progress_to(:rspec_tests)
+    deploy.complete!
+    deploy.fail!
 
 ## Sample Usage ##
-deploy_monitor = DeployMonitor.new('http://localhost:4567')
-system_name = :frontend
+    deploy_monitor = DeployMonitor.new('http://localhost:4567')
+    system_name = :frontend
 
-current_deploy = deploy_monitor.current_deploy(system_name)
-if current_deploy
-  puts "There is an existing active deploy for #{system_name} (id ##{current_deploy.deploy_id})."
-  print "[U]se this deploy or [a]bort it? (u) "
-  decision = STDIN.gets
-  deploy = if decision.strip.downcase == 'a'
-    current_deploy.fail
-    deploy_monitor.start_deploy(system_name)
-  else
-    current_deploy
-  end
-else
-  deploy = deploy_monitor.start_deploy(system_name)
-end
+    current_deploy = deploy_monitor.current_deploy(system_name)
+    if current_deploy
+      puts "There is an existing active deploy for #{system_name} (id ##{current_deploy.deploy_id})."
+      print "[U]se this deploy or [a]bort it? (u) "
+      decision = STDIN.gets
+      deploy = if decision.strip.downcase == 'a'
+        current_deploy.fail
+        deploy_monitor.start_deploy(system_name)
+      else
+        current_deploy
+      end
+    else
+      deploy = deploy_monitor.start_deploy(system_name)
+    end
 
-deploy.progress_to(:jshint, "Running RSpec Ruby tests")
+    deploy.progress_to(:jshint, "Running RSpec Ruby tests")
+
+## Proposed Command-Line Interface ##
+
+This interface is not yet implemented. General command format would be `deploy_monitor [flags] subcommand`
+
+    # Start a deploy for the system "frontend"
+    # Outputs error to stderr
+    # Outputs new deploy id to stdout
+    deploy_monitor --host http://localhost:4567 --system frontend start
+
+    # Operations on deploy
+    deploy_monitor --host http://localhost:4567 --deploy 123 --step <name_of_step> progress
+    deploy_monitor --host http://localhost:4567 --deploy 123 --metadata <json_metadata> set_metadata
+    deploy_monitor --host http://localhost:4567 --deploy 123 fail
+    deploy_monitor --host http://localhost:4567 --deploy 123 complete
