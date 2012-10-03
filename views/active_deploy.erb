@@ -1,7 +1,7 @@
 <% system = deploy.system %>
 <div class="span6 active-deploy" data-deploy-id="<%= deploy.id %>">
   <h2 class="system-name">
-    <%== system.name %>
+    <a href="/systems/<%== system.name %>"><%== system.name %></a>
     <span class="status">
       <a href="/deploys/<%= deploy.id %>">In progress</a> &middot;
       <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="(%?H:)%M:%S"><%= format_hms("(%?H:)%M:%S", deploy.duration) %></span> ago</span>
