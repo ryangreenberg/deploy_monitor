@@ -75,7 +75,8 @@ class DeployMonitor::API < Sinatra::Base
     step = Step[step_id]
     halt 404, Errors.format(:not_found, "Step id #{step_id}") unless step
 
-    step.set_fields(params, [:description, :number])
+    step.description = params[:description] if params[:description]
+    step.number = params[:number] if params[:number]
     step.save
 
     step.to_json
