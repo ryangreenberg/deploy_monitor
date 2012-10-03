@@ -1,5 +1,5 @@
 <div class="row active-deploys" style="margin-bottom: 20px" data-updated-at="<%= Time.now.to_i %>">
-  <h2 class="span12">Active Deploys</h2>
+  <h2 class="span12 section-header">Active Deploys</h2>
   <div class="deploy-list">
     <% @active_deploys.each do |deploy| %>
       <%= partial(:active_deploy, :locals => {:deploy => deploy})%>
@@ -12,22 +12,24 @@
 </div>
 
 <div class="row">
-  <h2 class="span12">Recent Deploys</h2>
-  <table class="span12 table table-bordered recent-deploys" data-updated-at="<%= Time.now.to_i %>">
-    <thead>
-      <tr>
-        <th>System</th>
-        <th>Deploy</th>
-        <th>Result</th>
-        <th>Finished</th>
-        <th>Duration</th>
-      </tr>
-    </thead>
+  <div class="span12">
+    <h2 class="section-header">Recent Deploys</h2>
+    <table class="table recent-deploys" data-updated-at="<%= Time.now.to_i %>">
+      <thead>
+        <tr>
+          <th>System</th>
+          <th>Deploy</th>
+          <th>Result</th>
+          <th>Finished</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
 
-    <tbody>
-    <% @past_deploys.each do |past_deploy| %>
-      <%= partial(:deploy_row, :locals => {:include_system => true, :deploy => past_deploy} ) %>
-    <% end %>
-    </tbody>
-  </table>
+      <tbody>
+      <% @past_deploys.each do |past_deploy| %>
+        <%= partial(:deploy_row, :locals => {:include_system => true, :deploy => past_deploy} ) %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

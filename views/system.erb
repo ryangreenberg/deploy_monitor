@@ -1,8 +1,8 @@
 <div class="row">
   <h2 class="span12"><%== @system.name %></h2>
 
-  <div class="span12">
-    <h2>Deploy Steps</h2>
+  <div class="span6">
+    <h2 class="section-header">Deploy Steps</h2>
     <ol>
       <% @system.steps.each do |step| %>
       <li><%== step.description %></li>
@@ -11,9 +11,9 @@
   </div>
   
   <div class="span12">
-    <h2>Recent Deploys</h2>
+    <h2 class="section-header">Recent Deploys</h2>
 
-    <table class="table table-bordered">
+    <table class="table">
       <thead>
         <tr>
           <th>Deploy</th>

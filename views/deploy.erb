@@ -1,5 +1,5 @@
 <div class="row deploy <%= "active" if @deploy.active %>" data-deploy-id="<%= @deploy.id %>">
-  <h2 class="span12"><%== @deploy.system.name %> Deploy <%= @deploy.id %></h2>
+  <h2 class="span12 section-header"><a href="/systems/<%== @deploy.system.name %>"><%== @deploy.system.name %></a> deploy</h2>
 
   <div class="span12 deploy-overview">
     <% if @deploy.active %>
@@ -9,46 +9,49 @@
     <% end %>
   </div>
 
-  <% if @deploy.has_metadata? %>
-  <table class="span12 table table-bordered">
-    <thead>
-      <tr>
-        <th class="span3">Key</th>
-        <th class="span9">Value</th>
-      </tr>
-    </thead>
+  <div class="span12 deploy-steps">
+    <% if @deploy.has_metadata? %>
+    <h2 class="section-header">Metadata</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="span3">Key</th>
+          <th class="span9">Value</th>
+        </tr>
+      </thead>
 
-    <tbody class="">
-      <% @deploy.metadata.each do |k, v|%>
-      <tr>
-        <td><%== k %></th>
-        <td><%= format_metadata_value(v) %></th>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <% end %>
+      <tbody class="">
+        <% @deploy.metadata.each do |k, v|%>
+        <tr>
+          <td><%== k %></th>
+          <td><%= format_metadata_value(v) %></th>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
 
-  <table class="span12 table table-bordered">
-    <thead>
-      <tr>
-        <th class="span9">Step</th>
-        <th class="span3">Duration</th>
-      </tr>
-    </thead>
+    <h2 class="section-header">Detailed Progress</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="span9">Step</th>
+          <th class="span3">Duration</th>
+        </tr>
+      </thead>
 
-    <tbody class="steps">
-      <% @deploy.progresses.each do |progress| %>
-        <%= partial(:deploy_progress_row, :locals => {
-          :progress => progress
-        }) %>
-      <% end %>
-      <% @future_steps.each do |step| %>
-        <%= partial(:deploy_step_row, :locals => {
-          :step => step
-        }) %>
-      <% end %>
-    </tbody>
-  </table>
-
+      <tbody class="steps">
+        <% @deploy.progresses.each do |progress| %>
+          <%= partial(:deploy_progress_row, :locals => {
+            :progress => progress
+          }) %>
+        <% end %>
+        <% @future_steps.each do |step| %>
+          <%= partial(:deploy_step_row, :locals => {
+            :step => step
+          }) %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
