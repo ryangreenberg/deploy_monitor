@@ -2,18 +2,7 @@ function RecentDeploys ($node) {
   this.$node = $node;
   this.intervalDuration = 10000;
 }
-
-RecentDeploys.prototype.startPeriodicUpdates = function() {
-  this.scheduleNextUpdate();
-};
-
-RecentDeploys.prototype.stopPeriodicUpdates = function() {
-  clearTimeout(this.updateTimeout);
-};
-
-RecentDeploys.prototype.scheduleNextUpdate = function() {
-  this.updateTimeout = setTimeout(this.update.bind(this), this.intervalDuration);
-};
+mixin(RecentDeploys.prototype, withPeriodicUpdates);
 
 RecentDeploys.prototype.update = function() {
   var lastUpdatedAt = this.getUpdatedAt();

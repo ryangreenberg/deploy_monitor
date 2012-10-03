@@ -2,18 +2,7 @@ function ActiveDeploys ($node) {
   this.$node = $node;
   this.intervalDuration = 10000;
 }
-
-ActiveDeploys.prototype.startPeriodicUpdates = function() {
-  this.scheduleNextUpdate();
-};
-
-ActiveDeploys.prototype.stopPeriodicUpdates = function() {
-  clearTimeout(this.updateTimeout);
-};
-
-ActiveDeploys.prototype.scheduleNextUpdate = function() {
-  this.updateTimeout = setTimeout(this.update.bind(this), this.intervalDuration);
-};
+mixin(ActiveDeploys.prototype, withPeriodicUpdates);
 
 ActiveDeploys.prototype.update = function() {
   var lastUpdatedAt = this.getUpdatedAt();

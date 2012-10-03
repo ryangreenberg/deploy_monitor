@@ -2,22 +2,7 @@ function ActiveDeploy ($node) {
   this.$node = $node;
   this.intervalDuration = 5000;
 }
-
-ActiveDeploy.prototype.startPeriodicUpdates = function() {
-  this.periodicUpdatesActive = true;
-  this.scheduleNextUpdate();
-};
-
-ActiveDeploy.prototype.stopPeriodicUpdates = function() {
-  this.periodicUpdatesActive = false;
-  clearTimeout(this.updateTimeout);
-};
-
-ActiveDeploy.prototype.scheduleNextUpdate = function() {
-  if (this.periodicUpdatesActive) {
-    this.updateTimeout = setTimeout(this.update.bind(this), this.intervalDuration);
-  }
-};
+mixin(ActiveDeploy.prototype, withPeriodicUpdates);
 
 ActiveDeploy.prototype.update = function() {
   var lastUpdatedAt = this.getUpdatedAt();
@@ -58,7 +43,6 @@ ActiveDeploy.prototype.display = function(rsp) {
 ActiveDeploy.prototype.getDeployId = function() {
   return this.$node.attr('data-deploy-id');
 };
-
 
 ActiveDeploy.prototype.getUpdatedAt = function() {
   return this.$node.attr('data-updated-at');
