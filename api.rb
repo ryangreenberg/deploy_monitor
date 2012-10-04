@@ -54,12 +54,16 @@ class DeployMonitor::API < Sinatra::Base
     existing_step = Step.filter(:name => name, :system => system).first
     halt 400, Errors.format(:duplicate_entity, "Step '#{name}'", existing_step.id) if existing_step
 
-    step = Step.create(
-      :system => system,
-      :name => name,
-      :description => description,
-      :number => number
-    )
+    step = DB.transaction do
+      Step.renumber_overlapping_steps(system, number)
+      Step.create(
+        :system => system,
+        :name => name,
+        :description => description,
+        :number => number
+      )
+    end
+
     [201, step.to_json]
   end
 
