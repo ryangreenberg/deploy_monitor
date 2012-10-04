@@ -4,6 +4,7 @@ module Errors
     :deploy_not_active => "Deploy is not active",
     :duplicate_deploy_step => "Deploy is already at step '%s'",
     :duplicate_entity => "%s already exists with id %s",
+    :invalid_number => "Step number '%s' is not valid",
     :not_found => "%s could not be found",
     :required_param_missing => "Missing required param '%s'",
     :system_has_no_steps => "Cannot start deploy for '%s' because there are no steps",
