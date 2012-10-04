@@ -30,7 +30,7 @@ class DeployMonitor::API < Sinatra::Base
     system.to_json(:include_steps => true)
   end
 
-  get '/:system/steps' do
+  get '/systems/:system/steps' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     halt 404, Errors.format(:not_found, "System '#{system_name}'") unless system
@@ -38,7 +38,7 @@ class DeployMonitor::API < Sinatra::Base
     {:steps => system.steps }.to_json
   end
 
-  post '/:system/steps' do
+  post '/systems/:system/steps' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     if system.nil?
@@ -48,6 +48,7 @@ class DeployMonitor::API < Sinatra::Base
     name = params[:name]
     description = params[:description] || ""
     number = params[:number] || system.next_step_number
+    halt 400, Errors.format(:invalid_step_number, number) unless number.to_s =~ /\A[0-9]+\Z/
     halt 400, Errors.format(:required_param_missing, 'name') unless name
     name = name.gsub(/ /, '_').downcase
 
@@ -86,7 +87,7 @@ class DeployMonitor::API < Sinatra::Base
     step.to_json
   end
 
-  get '/:system/deploys' do
+  get '/systems/:system/deploys' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     halt 404, Errors.format(:not_found, "System '#{system_name}'") unless system
@@ -99,7 +100,7 @@ class DeployMonitor::API < Sinatra::Base
     {:deploys => deploys.all }.to_json
   end
 
-  post '/:system/deploys' do
+  post '/systems/:system/deploys' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
     if system.nil?

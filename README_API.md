@@ -28,10 +28,10 @@ Create a new system
 
 Params: name
 
-### `GET /:system_name/steps`
+### `GET /systems/:system_name/steps`
 List the steps to deploy the given system
 
-### `POST /:system_name/steps`
+### `POST /systems/:system_name/steps`
 Create a new step for the given system
 
 Params: name, description, number
@@ -44,12 +44,12 @@ Update the given deploy step
 
 Params: name, description, number
 
-### `GET /:system_name/deploys`
+### `GET /systems/:system_name/deploys`
 List the deploys for the given system
 
 Params: active (true|false)
 
-### `POST /:system_name/deploys`
+### `POST /systems/:system_name/deploys`
 Create a new deploy for the given system. Will return HTTP 400 if a deploy for this system is already active.
 
 ### `GET /deploys/:deploy_id`
