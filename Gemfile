@@ -12,7 +12,8 @@ gem 'erubis', '~> 2.7.0'
 
 group :development, :test do
   gem 'minitest'
+  gem 'rack-test'
+  gem 'rr'
   gem 'rake'
   gem 'ruby-debug'
 end
-
