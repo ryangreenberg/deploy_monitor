@@ -15,6 +15,14 @@ module DeployMonitor
       deploy
     end
 
+    def api_url
+      "#{@client.base_url}/deploys/#{deploy_id}"
+    end
+
+    def web_url
+      "#{@client.web_url}/deploys/#{deploy_id}"
+    end
+
     def update_from_api(api_obj)
       @deploy_id = api_obj['id']
       @active = api_obj['active']
@@ -36,13 +44,12 @@ module DeployMonitor
     end
 
     def refresh_self
-      update_from_json(RestClient.get("#{@client.base_url}/deploys/#{@deploy_id}"))
+      update_from_json(RestClient.get(api_url))
     end
 
-    def progress_to(step, description = nil)
+    def progress_to(step)
       begin
-        RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/step/#{step}",
-          {:description => description})
+        RestClient.post("#{api_url}/step/#{step}", {})
         refresh_self
         true
       rescue RestClient::BadRequest => e
@@ -60,7 +67,7 @@ module DeployMonitor
     # If you want to delete a key, set its value to nil.
     def update_metadata(hsh)
       begin
-        rsp = RestClient.put("#{@client.base_url}/deploys/#{@deploy_id}", hsh)
+        rsp = RestClient.put(api_url, hsh)
         update_from_json(rsp)
         true
       rescue RestClient::Exception
@@ -70,8 +77,7 @@ module DeployMonitor
 
     def fail!
       begin
-        rsp = RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/complete",
-          {:result => :failed})
+        rsp = RestClient.post("#{api_url}/complete", {:result => :failed})
         update_from_json(rsp)
         true
       rescue RestClient::Exception
@@ -81,7 +87,7 @@ module DeployMonitor
 
     def complete!
       begin
-        rsp = RestClient.post("#{@client.base_url}/deploys/#{@deploy_id}/complete", {})
+        rsp = RestClient.post("#{api_url}/complete", {})
         update_from_json(rsp)
         true
       rescue RestClient::Exception

@@ -12,6 +12,14 @@ module DeployMonitor
       system
     end
 
+    def api_url
+      "#{@client.base_url}/systems/#{name}"
+    end
+
+    def web_url
+      "#{@client.web_url}/systems/#{name}"
+    end
+
     def update_from_api(api_obj)
       self.system_id = api_obj['id']
       self.name = api_obj['name']
@@ -20,7 +28,7 @@ module DeployMonitor
 
     def start_deploy
       begin
-        rsp = RestClient.post("#{base_url}/#{name}/deploys", {})
+        rsp = RestClient.post("#{api_url}/deploys", {})
         deploy = Deploy.from_api(self.client, JSON.parse(rsp.body))
         deploy.system = self
         deploy
@@ -31,7 +39,7 @@ module DeployMonitor
     end
 
     def current_deploy
-      rsp = RestClient.get("#{base_url}/#{name}/deploys", :params => {:active => true})
+      rsp = RestClient.get("#{api_url}/deploys", :params => {:active => true})
       deploys = JSON.parse(rsp.body)['deploys']
       if deploys.empty?
         nil

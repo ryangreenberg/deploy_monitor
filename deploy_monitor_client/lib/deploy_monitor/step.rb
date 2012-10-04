@@ -9,6 +9,14 @@ module DeployMonitor
       step
     end
 
+    def api_url
+      "#{@client.base_url}/steps/#{step_id}"
+    end
+
+    def web_url
+      ""
+    end
+
     def update_from_api(api_obj)
       self.step_id = api_obj['id']
       self.name = api_obj['name']

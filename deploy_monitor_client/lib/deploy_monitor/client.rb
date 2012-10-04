@@ -39,5 +39,9 @@ module DeployMonitor
     def base_url
       "#{@host}/api"
     end
+
+    def web_url
+      @host
+    end
   end
 end
