@@ -8,7 +8,7 @@ class System < Sequel::Model
 
   # Returns the next available number for a step associated with this system
   def next_step_number
-    highest_existing_step = self.steps.order(:number.desc).limit(1).first
+    highest_existing_step = self.steps_dataset.order(:number.desc).limit(1).first
     highest_existing_step ? highest_existing_step.number : 0
   end
 
