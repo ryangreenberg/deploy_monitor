@@ -21,7 +21,8 @@
       </thead>
 
       <tbody class="">
-        <% @deploy.metadata.each do |k, v|%>
+        <% @deploy.metadata.keys.sort.each do |k|%>
+        <% v = @deploy.metadata[k] %>
         <tr>
           <td><%== k %></th>
           <td><%= format_metadata_value(v) %></th>
