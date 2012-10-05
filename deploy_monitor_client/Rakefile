@@ -1,3 +1,0 @@
-#!/usr/bin/env rake
-require 'twitter_gem_utils'
-TwitterGemUtils.install_tasks
