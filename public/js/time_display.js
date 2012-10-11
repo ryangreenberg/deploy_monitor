@@ -18,6 +18,16 @@
     });
   };
 
+  TimeDisplay.prototype.makeTimesLocal = function() {
+    this.$node.find('.local-time').each(function() {
+      var $this = $(this);
+      var timestamp = $this.attr('data-timestamp');
+      var date = new Date(timestamp * 1000);
+      $this.text(date.toString().replace(/GMT[\-+]\d+? /, ''));
+      $this.removeClass('relative-time');
+    });
+  };
+
   // formatDuration accepts the following format strings:
   // %H: hours with leading zero
   // %M: minutes with leading zero
