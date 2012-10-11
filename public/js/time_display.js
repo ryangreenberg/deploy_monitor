@@ -5,10 +5,13 @@
   }
 
   TimeDisplay.prototype.start = function() {
-    $(this.$node).bind('tick', this.updateTimes.bind(this));
+    $(this.$node).bind('tick', (function() {
+      this.updateTimers();
+      this.makeTimesLocal();
+    }).bind(this));
   };
 
-  TimeDisplay.prototype.updateTimes = function() {
+  TimeDisplay.prototype.updateTimers = function() {
     var now = Math.floor(new Date().getTime() / 1000);
     this.$node.find('.timer').each(function () {
       var $this = $(this);
