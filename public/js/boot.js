@@ -26,6 +26,8 @@ App.prototype.bootDomReady = function() {
     this.activeDeploy = new ActiveDeploy($('.deploy.active'));
     this.activeDeploy.startPeriodicUpdates();
   }
+
+  this.timeDisplay.makeTimesLocal();
 };
 
 var app = new App();
