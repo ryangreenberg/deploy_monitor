@@ -1,1 +1,5 @@
-<h3><%= deploy.status_label.to_s.capitalize %> at <%= deploy.finished_at %>. (<%= format_hms("(%?Hh )%Mm %Ss", deploy.duration) %>)</h3>
+<h3>
+  <%= deploy.status_label.to_s.capitalize %> at
+  <span class="local-time" data-timestamp="<%= deploy.finished_at.to_i %>"><%= deploy.finished_at %></span> after
+  <%= format_hms("(%?Hh )%Mm %Ss", deploy.duration) %>
+</h3>

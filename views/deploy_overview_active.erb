@@ -6,7 +6,7 @@
 <h2>
   <span class="status">
     In progress &middot;
-    <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="(%?H:)%M:%S"><%= format_hms("(%?H:)%M:%S", deploy.duration) %></span> ago</span>
+    <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="(%?Hh )%Mm %Ss"><%= format_hms("(%?Hh )%Mm %Ss", deploy.duration) %></span> ago</span>
   </span>
 </h2>
 
