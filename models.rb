@@ -10,3 +10,5 @@ require 'models/system'
 require 'models/step'
 require 'models/deploy'
 require 'models/progress'
+
+require 'models/system_statistics'
