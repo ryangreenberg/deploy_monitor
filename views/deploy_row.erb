@@ -8,6 +8,14 @@
       <%= deploy.status_label %>
     </span>
   </td>
-  <td><span class="local-time" data-timestamp="<%= deploy.finished_at.to_i %>"><%= deploy.finished_at %></span></td>
-  <td><%= format_hms("(%?Hh) %Mm %Ss", deploy.duration) %></td>
+  <td>
+    <% if deploy.active %>
+      <span>&ndash;</span>
+    <% else %>
+      <span class="local-time" data-timestamp="<%= deploy.finished_at.to_i %>"><%= deploy.finished_at %></span>
+    <% end %>
+  </td>
+  <td>
+    <span class="<%= 'timer' if deploy.active %>" data-timestamp="<%= deploy.started_at.to_i %>" data-format="(%?Hh) %Mm %Ss"><%= format_hms("(%?Hh) %Mm %Ss", deploy.duration) %>
+  </td>
 </tr>
