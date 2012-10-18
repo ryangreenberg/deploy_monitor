@@ -28,6 +28,13 @@ class DeployMonitor::Web < Sinatra::Base
     erb :system
   end
 
+  get '/systems/:system_name/active_deploy' do
+    @system = System.filter(:name => params[:system_name]).first
+    halt 404 unless @system
+    deploy = @system.active_deploy
+    redirect (deploy ? Paths.for_deploy(deploy) : Paths.for_system(@system))
+  end
+
   get '/recent_deploys' do
     updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - 10
     deploys = Deploy.filter(:active => false).
