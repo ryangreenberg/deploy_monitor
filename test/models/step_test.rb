@@ -7,7 +7,7 @@ describe Step do
   end
 
   describe "#renumber_overlapping_steps" do
-    it "it adjusts the system steps that are greater than the provided number" do
+    it "adjusts the system steps that are greater than the provided number" do
       first = Step.create(:name => "first", :system => @system, :number => 1)
       second = Step.create(:name => "second", :system => @system, :number => 2)
       Step.renumber_overlapping_steps(@system, 1)
