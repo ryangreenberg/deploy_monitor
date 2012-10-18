@@ -9,7 +9,22 @@
       <% end %>
     </ol>
   </div>
-  
+
+  <div class="span6">
+    <h2 class="section-header">Deploy Statistics</h2>
+    <h4>Outcome</h4>
+    <div class="deploy-outcomes">
+      <%== @stats.num_complete_deploys %> <span class="label label-success">Complete</span> &middot;
+      <%== @stats.num_failed_deploys %> <span class="label label-important">Failed</span>
+    </div>
+
+    <h4>Duration</h4>
+    <ul class="deploy-durations">
+      <li>Median: <%== format_hms("(%?Hh) %Mm %Ss", @stats.median_duration.round) %></li>
+      <li>Average: <%== format_hms("(%?Hh) %Mm %Ss", @stats.avg_duration.round) %></li>
+    </ul>
+  </div>
+
   <div class="span12">
     <h2 class="section-header">Recent Deploys</h2>
 

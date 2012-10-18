@@ -12,6 +12,16 @@ class System < Sequel::Model
     highest_existing_step ? highest_existing_step.number : 0
   end
 
+  def durations
+    @durations ||= begin
+      deploys = deploys_dataset.
+        filter(:result => Models::RESULTS[:complete]).
+        select(:started_at, :finished_at).
+        all
+      deploys.map {|ea| ea.finished_at - ea.started_at }
+    end
+  end
+
   def to_hash(options = {})
     hsh = values
     if options[:include_steps]
