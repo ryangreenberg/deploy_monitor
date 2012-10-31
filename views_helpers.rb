@@ -15,6 +15,18 @@ module ViewsHelpers
     end
   end
 
+  def result_symbol(obj)
+    if obj.active?
+      '&hellip;' # ellipsis
+    else
+      if obj.complete?
+        '&#10003;' # checkmark
+      elsif obj.failed?
+        '&#10007;' # ballot X
+      end
+    end
+  end
+
   def format_metadata_value(value)
     escaped_value = h(value)
     if value =~ /^https?:\/\//
