@@ -3,14 +3,26 @@ require 'erubis'
 module ViewsHelpers
   include ::Erubis::XmlHelper
 
-  def display_label(deploy)
-    if deploy.active
+  def result_label_css_class(obj)
+    if obj.active?
       'label-info'
     else
-      if deploy.complete?
+      if obj.complete?
         'label-success'
-      elsif deploy.failed?
+      elsif obj.failed?
         'label-important'
+      end
+    end
+  end
+
+  def result_symbol(obj)
+    if obj.active?
+      '&hellip;' # ellipsis
+    else
+      if obj.complete?
+        '&#10003;' # checkmark
+      elsif obj.failed?
+        '&#10007;' # ballot X
       end
     end
   end

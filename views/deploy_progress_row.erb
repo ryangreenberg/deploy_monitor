@@ -1,5 +1,5 @@
 <tr class="<%= progress.active ? 'active' : '' %>">
-  <td><%== progress.step.description %></td>
+  <td><span class="label <%== result_label_css_class(progress) %>"><%= result_symbol(progress) %></span> <%== progress.step.description %></td>
   <td>
     <% if progress.active %>
     <span class="timer" data-timestamp="<%= progress.started_at.to_i %>" data-format="(%?Hh) %Mm %Ss">

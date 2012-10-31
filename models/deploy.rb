@@ -1,6 +1,8 @@
 require 'json'
 
 class Deploy < Sequel::Model
+  include Resultable
+
   many_to_one :system
   one_to_many :progresses
 
@@ -13,24 +15,19 @@ class Deploy < Sequel::Model
     filter { {:active => true} }
   end
 
-  module Result
-    def complete?
-      result == Models::RESULTS[:complete]
-    end
+  def active?
+    active
+  end
 
-    def failed?
-      result == Models::RESULTS[:failed]
-    end
-
-    def status_label
-      if active
-        'in progress'
-      else
-        Models::RESULTS.invert[result]
-      end
+  def duration
+    if started_at && finished_at
+      finished_at - started_at
+    elsif started_at
+      Time.now - started_at
+    else
+      nil
     end
   end
-  include Result
 
   module Steps
     # Get steps after the last progress for this deploy
@@ -67,16 +64,6 @@ class Deploy < Sequel::Model
     end
   end
   include Steps
-
-  def duration
-    if started_at && finished_at
-      finished_at - started_at
-    elsif started_at
-      Time.now - started_at
-    else
-      nil
-    end
-  end
 
   module Metadata
     def metadata
