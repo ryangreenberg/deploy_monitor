@@ -1,4 +1,6 @@
 class Progress < Sequel::Model
+  include Resultable
+
   many_to_one :deploy
   many_to_one :step
 
@@ -6,6 +8,10 @@ class Progress < Sequel::Model
     :create => :created_at,
     :update => :updated_at,
     :update_on_create => true
+
+  def active?
+    active
+  end
 
   def duration
     if started_at && finished_at
