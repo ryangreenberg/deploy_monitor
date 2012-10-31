@@ -6,6 +6,8 @@ module Models
   }
 end
 
+require 'models/resultable'
+
 require 'models/system'
 require 'models/step'
 require 'models/deploy'
