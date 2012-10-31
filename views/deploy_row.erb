@@ -4,7 +4,7 @@
   <% end %>
   <td><a href="/deploys/<%= deploy.id %>"><%= deploy.id %></a></td>
   <td>
-    <span class="label <%= display_label(deploy) %>">
+    <span class="label <%= result_label_css_class(deploy) %>">
       <%= deploy.status_label %>
     </span>
   </td>
