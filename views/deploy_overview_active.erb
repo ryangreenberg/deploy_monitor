@@ -1,6 +1,6 @@
 <form class="abort-form" method="POST" action="/api/deploys/<%== deploy.id %>/complete">
   <input type="hidden" name="result" value="failed">
-  <input class="btn btn-danger" type="submit" value="Abort Deploy">
+  <input class="btn btn-danger" type="submit" data-confirm="Are you sure you want to stop monitoring this deploy?" value="Stop Monitoring">
 </form>
 
 <h2>
