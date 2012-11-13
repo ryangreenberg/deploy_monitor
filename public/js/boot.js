@@ -8,6 +8,8 @@ App.prototype.boot = function() {
   this.timeDisplay = new TimeDisplay($(document));
   this.timeDisplay.start();
 
+  this.confirmations = new Confirmations($(document));
+
   $(this.bootDomReady.bind(this));
 };
 
