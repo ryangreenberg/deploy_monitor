@@ -5,6 +5,7 @@ require 'rack/test'
 require 'minitest/mock'
 require 'minitest/autorun'
 require 'rr'
+require 'ostruct'
 
 # Use in-memory database for tests
 DB = Sequel.sqlite
@@ -29,4 +30,9 @@ class MiniTest::Unit::TestCase
     end
     result
   end
+end
+
+# Makes `TestStruct.new(:id => 5).id` work
+class TestStruct < OpenStruct
+  undef id
 end

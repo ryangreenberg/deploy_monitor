@@ -30,6 +30,14 @@ class Deploy < Sequel::Model
   end
 
   module Steps
+    def current_step
+      if active && cur_progress = current_progress
+        current_progress.step
+      else
+        nil
+      end
+    end
+
     # Get steps after the last progress for this deploy
     def future_steps
       if active
@@ -37,6 +45,10 @@ class Deploy < Sequel::Model
       else
         []
       end
+    end
+
+    def remaining_steps
+      ([ current_step ] + future_steps).compact
     end
 
     # Returns the number of the current progress associated with this deploy + 1
