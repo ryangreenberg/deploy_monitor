@@ -1,5 +1,4 @@
 require 'rubygems' unless defined?(Bundler)
-require 'ruby-debug'
 require 'sequel'
 require 'rack/test'
 require 'minitest/mock'
