@@ -16,7 +16,7 @@ describe StepStatistics do
     end
   end
 
-  describe "#step_success_rate" do
+  describe "#completion_rate_for_step_id" do
     it "is the number of completions divided by the number of progresses" do
       steps = [
         TestStruct.new(:id => 2)
@@ -26,12 +26,12 @@ describe StepStatistics do
         TestStruct.new(:step_id => 2, :complete? => false)
       ]
       stats = StepStatistics.new(steps, progresses)
-      assert_equal 0.5, stats.step_success_rate(2)
+      assert_equal 0.5, stats.completion_rate_for_step_id(2)
     end
 
     it "is nil when there is no data for the progresses" do
       stats = StepStatistics.new([], [])
-      assert_equal nil, stats.step_success_rate(1)
+      assert_equal nil, stats.completion_rate_for_step_id(1)
     end
   end
 end

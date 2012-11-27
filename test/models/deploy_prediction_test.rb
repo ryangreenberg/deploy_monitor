@@ -42,9 +42,9 @@ describe DeployPrediction do
       # - x
       # - - x
       # - - -
-      stub(@progress_stats).step_success_rate(1) { 1.0 }
-      stub(@progress_stats).step_success_rate(2) { 0.5 }
-      stub(@progress_stats).step_success_rate(3) { 0.5 }
+      stub(@progress_stats).completion_rate_for_step_id(1) { 1.0 }
+      stub(@progress_stats).completion_rate_for_step_id(2) { 0.5 }
+      stub(@progress_stats).completion_rate_for_step_id(3) { 0.5 }
       stub(@deploy).remaining_steps do
         [ TestStruct.new(:id => 1), TestStruct.new(:id => 2), TestStruct.new(:id => 3) ]
       end
@@ -54,8 +54,8 @@ describe DeployPrediction do
     end
 
     it "ignores failures that occurred before the deploy's current step" do
-      stub(@progress_stats).step_success_rate(1) { 0.25 }
-      stub(@progress_stats).step_success_rate(2) { 0.50 }
+      stub(@progress_stats).completion_rate_for_step_id(1) { 0.25 }
+      stub(@progress_stats).completion_rate_for_step_id(2) { 0.50 }
       stub(@deploy).remaining_steps { [ TestStruct.new(:id => 2) ] }
 
       prediction = DeployPrediction.new(@deploy, @progress_stats)

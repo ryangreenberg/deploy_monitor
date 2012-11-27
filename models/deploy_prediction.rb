@@ -13,7 +13,7 @@ class DeployPrediction
 
     relevant_steps = @deploy.remaining_steps
 
-    success_rates = relevant_steps.map {|step| @progress_stats.step_success_rate(step.id) }
+    success_rates = relevant_steps.map {|step| @progress_stats.completion_rate_for_step_id(step.id) }
     success_rates.inject(1.0) {|accum, ea| accum * ea }
   end
 
