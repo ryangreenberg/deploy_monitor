@@ -7,7 +7,7 @@ class DeployPrediction
   # The reasoning behind this method is that the probability of a deploy
   # completing successfully is the probability of all of its each steps
   # completing successfully
-  def success_probability
+  def completion_probability
     return obvious_probability unless @deploy.active?
     return 1.0 if @progress_stats.empty?
 

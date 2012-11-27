@@ -2,7 +2,7 @@ require 'test/test_helper'
 require 'models'
 
 describe DeployPrediction do
-  describe "#success_probability" do
+  describe "#completion_probability" do
     before(:each) do
       @deploy = Deploy.new(
         :active => true
@@ -19,20 +19,20 @@ describe DeployPrediction do
       stub(@deploy).active { false }
       stub(@deploy).complete? { true }
       prediction = DeployPrediction.new(@deploy, @progress_stats)
-      assert_equal 1.0, prediction.success_probability
+      assert_equal 1.0, prediction.completion_probability
     end
 
     it "is 0% for non-active deploys that failed" do
       stub(@deploy).active  { false }
       stub(@deploy).failed? { true }
       prediction = DeployPrediction.new(@deploy, @progress_stats)
-      assert_equal 0.0, prediction.success_probability
+      assert_equal 0.0, prediction.completion_probability
     end
 
     it "optimistically assumes 100% if no data is available" do
       stub(@progress_stats).empty? { true }
       prediction = DeployPrediction.new(@deploy, @progress_stats)
-      assert_equal 1.0, prediction.success_probability
+      assert_equal 1.0, prediction.completion_probability
     end
 
     it "is the joint probability of each step completing successfully" do
@@ -50,7 +50,7 @@ describe DeployPrediction do
       end
 
       prediction = DeployPrediction.new(@deploy, @progress_stats)
-      assert_equal 0.25, prediction.success_probability
+      assert_equal 0.25, prediction.completion_probability
     end
 
     it "ignores failures that occurred before the deploy's current step" do
@@ -59,7 +59,7 @@ describe DeployPrediction do
       stub(@deploy).remaining_steps { [ TestStruct.new(:id => 2) ] }
 
       prediction = DeployPrediction.new(@deploy, @progress_stats)
-      assert_equal 0.50, prediction.success_probability
+      assert_equal 0.50, prediction.completion_probability
     end
   end
 end
