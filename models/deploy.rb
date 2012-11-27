@@ -29,7 +29,29 @@ class Deploy < Sequel::Model
     end
   end
 
+  def completion_probability
+    num_deploys_to_consider = 100
+    progresses = Progress.join(
+      Deploy.filter(:system_id => 1).order_by(:created_at.desc).limit(num_deploys_to_consider),
+      :id => :deploy_id
+    ).select(:deploy_id, :progresses__id, :progresses__result, :progresses__step_id)
+
+    # TODO: An obvious optimization here would be to provide ProgressStatistics
+    # with the Sequel dataset instead of individual objects to defer the lookup
+    stats = StepStatistics.new(system.steps, progresses.all)
+    prediction = DeployPrediction.new(self, stats)
+    prediction.completion_probability
+  end
+
   module Steps
+    def current_step
+      if active && cur_progress = current_progress
+        current_progress.step
+      else
+        nil
+      end
+    end
+
     # Get steps after the last progress for this deploy
     def future_steps
       if active
@@ -37,6 +59,10 @@ class Deploy < Sequel::Model
       else
         []
       end
+    end
+
+    def remaining_steps
+      ([ current_step ] + future_steps.map {|ea| ea}).compact
     end
 
     # Returns the number of the current progress associated with this deploy + 1
@@ -145,6 +171,9 @@ class Deploy < Sequel::Model
 
       # Provide metadata
       hsh[:metadata] = metadata
+
+      # Provide completion probability
+      hsh[:completion_probability] = completion_probability
 
       hsh
     end
