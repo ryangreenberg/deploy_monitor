@@ -11,7 +11,7 @@ describe DeployPrediction do
       stub(@deploy).future_steps { [TestStruct.new(:id => 3), TestStruct.new(:id => 4)] }
       @failed_progress = TestStruct.new(:failed? => true, :deploy_id => 1)
 
-      @progress_stats = StepStatistics.new([])
+      @progress_stats = StepStatistics.new([], [])
       stub(@progress_stats).empty? { false }
     end
 
