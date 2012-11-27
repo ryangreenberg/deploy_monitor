@@ -1,4 +1,4 @@
-class ProgressStatistics
+class StepStatistics
   def initialize(progresses)
     @progresses = progresses
   end

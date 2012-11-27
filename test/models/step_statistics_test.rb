@@ -1,14 +1,14 @@
 require 'test/test_helper'
 require 'models'
 
-describe ProgressStatistics do
+describe StepStatistics do
   describe "#empty?" do
     it "is true when initialized with no progresses" do
-      assert ProgressStatistics.new([]).empty?
+      assert StepStatistics.new([]).empty?
     end
 
     it "is false when initialized with progresses" do
-      refute ProgressStatistics.new([TestStruct.new]).empty?
+      refute StepStatistics.new([TestStruct.new]).empty?
     end
   end
 
@@ -18,12 +18,12 @@ describe ProgressStatistics do
         TestStruct.new(:step_id => 2, :complete? => true),
         TestStruct.new(:step_id => 2, :complete? => false)
       ]
-      stats = ProgressStatistics.new(progresses)
+      stats = StepStatistics.new(progresses)
       assert_equal 0.5, stats.step_success_rate(2)
     end
 
     it "is nil when there is no data for the progresses" do
-      stats = ProgressStatistics.new([])
+      stats = StepStatistics.new([])
       assert_equal nil, stats.step_success_rate(1)
     end
   end

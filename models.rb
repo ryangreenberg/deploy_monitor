@@ -16,5 +16,5 @@ require 'models/progress'
 
 # Pure Ruby
 require 'models/deploy_prediction'
-require 'models/progress_statistics'
+require 'models/step_statistics'
 require 'models/system_statistics'

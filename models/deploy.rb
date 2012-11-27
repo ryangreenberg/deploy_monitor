@@ -38,7 +38,7 @@ class Deploy < Sequel::Model
 
     # TODO: An obvious optimization here would be to provide ProgressStatistics
     # with the Sequel dataset instead of individual objects to defer the lookup
-    stats = ProgressStatistics.new(progresses.all)
+    stats = StepStatistics.new(progresses.all)
     prediction = DeployPrediction.new(self, stats)
     prediction.completion_probability
   end
