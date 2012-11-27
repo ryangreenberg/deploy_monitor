@@ -6,7 +6,7 @@ module DeployMonitor
     TIMESTAMPS = [:created_at, :updated_at, :started_at, :finished_at]
 
     attr_accessor :client, :system
-    attr_reader :deploy_id, :active, :progress, :metadata, *TIMESTAMPS
+    attr_reader :deploy_id, :active, :progress, :metadata, :completion_probability, *TIMESTAMPS
 
     def self.from_api(client, api_obj)
       deploy = self.new
@@ -28,6 +28,7 @@ module DeployMonitor
       @active = api_obj['active']
       @progress = api_obj['progress']
       @metadata = api_obj['metadata']
+      @completion_probability = api_obj['completion_probability']
 
       @created_at = api_obj['created_at'] ? Time.at(api_obj['created_at']) : nil
       @updated_at = api_obj['updated_at'] ? Time.at(api_obj['updated_at']) : nil

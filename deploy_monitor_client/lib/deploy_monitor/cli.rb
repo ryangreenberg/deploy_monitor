@@ -69,6 +69,9 @@ module DeployMonitor
         @deploy = @system.current_deploy
         say("Resumed deploy #{@deploy.deploy_id}")
       end
+      if @deploy.completion_probability
+        say("Probability of completion: #{(@deploy.completion_probability * 100).round}%")
+      end
       prompt_for_deploy_steps
     end
 

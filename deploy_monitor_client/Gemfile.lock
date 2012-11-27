@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    deploy_monitor (0.0.1)
+    deploy_monitor (0.0.2)
       highline
       json
       rest-client
