@@ -27,6 +27,12 @@ describe Deploy do
         assert_equal now_timestamp, hsh[:started_at]
         assert_equal now_timestamp, hsh[:finished_at]
       end
+
+      it "includes the completion probability" do
+        deploy = Deploy.new(@default_attrs)
+        stub(deploy).completion_probability { 0.50 }
+        assert 0.50, deploy.to_hash[:completion_probability]
+      end
     end
   end
 end
