@@ -25,6 +25,7 @@ class DeployMonitor::Web < Sinatra::Base
     @system = System.filter(:name => params[:system_name]).first
     halt 404 unless @system
     @stats = SystemStatistics.new(@system)
+    @step_stats = StepStatistics.new(@system.steps, @system.progresses_from_recent_deploys.all)
     @recent_deploys = Deploy.filter(:system => @system).order(:updated_at.desc).limit(10)
     erb :system
   end

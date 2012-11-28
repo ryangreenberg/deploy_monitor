@@ -30,8 +30,7 @@ class Deploy < Sequel::Model
   end
 
   def completion_probability
-    num_deploys_to_consider = 100
-    progresses = system.progresses_from_recent_deploys(num_deploys_to_consider)
+    progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
 
     # TODO: An obvious optimization here would be to provide ProgressStatistics
     # with the Sequel dataset instead of individual objects to defer the lookup

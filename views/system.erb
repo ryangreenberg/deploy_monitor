@@ -3,11 +3,24 @@
 
   <div class="span6">
     <h2 class="section-header">Deploy Steps</h2>
-    <ol>
+
+    <table class="table table-condensed step-list">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Completion Rate</th>
+        </tr>
+      </thead>
+
       <% @system.steps.each do |step| %>
-      <li><%== step.description %></li>
+      <tr>
+        <td><%== step.description %></td>
+        <td><%== format_percent(@step_stats.completion_rate_for_step(step), 1) %>%</td>
+      </tr>
       <% end %>
-    </ol>
+    </table>
+
+    <p><em>Data is based on trailing <%= Models::DEFAULT_DEPLOY_STATS_WINDOW %> deploys.</em></p>
   </div>
 
   <div class="span6">
