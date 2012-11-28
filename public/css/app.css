@@ -50,3 +50,7 @@ tr > *:first-child {
   position: relative;
   top: -4px;
 }
+
+.step-list {
+  font-size: 14px;
+}
