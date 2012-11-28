@@ -31,10 +31,7 @@ class Deploy < Sequel::Model
 
   def completion_probability
     num_deploys_to_consider = 100
-    progresses = Progress.join(
-      Deploy.filter(:system_id => 1).order_by(:created_at.desc).limit(num_deploys_to_consider),
-      :id => :deploy_id
-    ).select(:deploy_id, :progresses__id, :progresses__result, :progresses__step_id)
+    progresses = system.progresses_from_recent_deploys(num_deploys_to_consider)
 
     # TODO: An obvious optimization here would be to provide ProgressStatistics
     # with the Sequel dataset instead of individual objects to defer the lookup

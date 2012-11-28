@@ -22,6 +22,13 @@ class System < Sequel::Model
     end
   end
 
+  def progresses_from_recent_deploys(num_deploys_to_consider = 50)
+    Progress.join(
+      Deploy.filter(:system => self).order_by(:created_at.desc).limit(num_deploys_to_consider),
+      :id => :deploy_id
+    ).select(:deploy_id, :progresses__id, :progresses__result, :progresses__step_id)
+  end
+
   def to_hash(options = {})
     hsh = values
     if options[:include_steps]
