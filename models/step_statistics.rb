@@ -4,6 +4,10 @@ class StepStatistics
     @progresses = progresses
   end
 
+  def completion_rate_for_step(step)
+    completion_rate_for_step_id(step.id)
+  end
+
   def completion_rate_for_step_id(step_id)
     progresses_for_step = @progresses.select {|ea| ea.step_id == step_id}
     if progresses_for_step.empty?
