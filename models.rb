@@ -4,6 +4,8 @@ module Models
     :failed => 1,
     :abandoned => 2
   }
+
+  DEFAULT_DEPLOY_STATS_WINDOW = 100
 end
 
 require 'models/resultable'
