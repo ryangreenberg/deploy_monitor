@@ -37,4 +37,9 @@ module ViewsHelpers
       escaped_value
     end
   end
+
+  def format_percent(value, digits=0)
+    rounded_val = (value * 10**(2 + digits)).round.to_f / 10**(digits)
+    digits == 0 ? rounded_val.to_i : rounded_val
+  end
 end
