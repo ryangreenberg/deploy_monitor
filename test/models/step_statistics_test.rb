@@ -77,4 +77,48 @@ describe StepStatistics do
       assert_equal nil, stats.mean_duration_for_step_id(1)
     end
   end
+
+  describe "#median_duration_for_step_id" do
+    it "is the central value of the durations for the progresses for the step" do
+      steps = [
+        TestStruct.new(:id => 2)
+      ]
+      progresses = [
+        TestStruct.new(:step_id => 2, :duration => 10, :complete? => true),
+        TestStruct.new(:step_id => 2, :duration => 20, :complete? => true),
+        TestStruct.new(:step_id => 2, :duration => 50, :complete? => true)
+      ]
+      stats = StepStatistics.new(steps, progresses)
+      assert_equal 20, stats.median_duration_for_step_id(2)
+    end
+
+    it "ignores progresses for other steps" do
+      steps = [
+        TestStruct.new(:id => 2)
+      ]
+      progresses = [
+        TestStruct.new(:step_id => 2, :duration => 10, :complete? => true),
+        TestStruct.new(:step_id => 3, :duration => 20, :complete? => true)
+      ]
+      stats = StepStatistics.new(steps, progresses)
+      assert_equal 10, stats.median_duration_for_step_id(2)
+    end
+
+    it "ignores progresses that are not complete" do
+      steps = [
+        TestStruct.new(:id => 2)
+      ]
+      progresses = [
+        TestStruct.new(:step_id => 2, :duration => 10, :complete? => false),
+        TestStruct.new(:step_id => 2, :duration => 40, :complete? => true)
+      ]
+      stats = StepStatistics.new(steps, progresses)
+      assert_equal 40, stats.median_duration_for_step_id(2)
+    end
+
+    it "is nil when there is no data for the step" do
+      stats = StepStatistics.new([], [])
+      assert_equal nil, stats.median_duration_for_step_id(1)
+    end
+  end
 end

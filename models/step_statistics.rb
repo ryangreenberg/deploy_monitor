@@ -25,6 +25,17 @@ class StepStatistics
     end
   end
 
+  def median_duration_for_step(step)
+    median_duration_for_step_id(step.id)
+  end
+
+  def median_duration_for_step_id(step_id)
+    with_completed_progresses(step_id) do |progresses, completed|
+      stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
+      stats.median
+    end
+  end
+
   def size
     @progresses.size
   end
