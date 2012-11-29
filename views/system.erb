@@ -9,6 +9,7 @@
         <tr>
           <th>Description</th>
           <th>Completion Rate</th>
+          <th>Duration</th>
         </tr>
       </thead>
 
@@ -16,6 +17,7 @@
       <tr>
         <td><%== step.description %></td>
         <td><%== format_percent(@step_stats.completion_rate_for_step(step), 1) %>%</td>
+        <td><%== format_hms("(%?Hh) %Mm %Ss", @step_stats.mean_duration_for_step(step).round) %></td>
       </tr>
       <% end %>
     </table>
