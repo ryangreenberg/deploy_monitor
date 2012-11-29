@@ -20,7 +20,8 @@ class StepStatistics
 
   def mean_duration_for_step_id(step_id)
     with_completed_progresses(step_id) do |progresses, completed|
-      completed.inject(0.0) {|sum, ea| sum + ea.duration } / completed.count
+      stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
+      stats.mean
     end
   end
 

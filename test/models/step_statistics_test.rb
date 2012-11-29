@@ -72,9 +72,9 @@ describe StepStatistics do
       assert_equal 40, stats.mean_duration_for_step_id(2)
     end
 
-     it "is nil when there is no data for the step" do
-       stats = StepStatistics.new([], [])
-       assert_equal nil, stats.mean_duration_for_step_id(1)
-     end
+    it "is nil when there is no data for the step" do
+      stats = StepStatistics.new([], [])
+      assert_equal nil, stats.mean_duration_for_step_id(1)
+    end
   end
 end
