@@ -30,4 +30,11 @@ class StepStatistics
   def empty?
     @progresses.empty?
   end
+
+  private
+
+  # TODO Refactor to use this method
+  def progresses_for_step(step_id)
+    @progresses.select {|ea| ea.step_id == step_id }
+  end
 end
