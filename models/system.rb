@@ -28,7 +28,14 @@ class System < Sequel::Model
       :id => :deploy_id
     )
     completed_progresses = progresses.filter(:progresses__active => false)
-    completed_progresses.select(:deploy_id, :progresses__id, :progresses__result, :progresses__step_id)
+    completed_progresses.select(
+      :deploy_id,
+      :progresses__id,
+      :progresses__result,
+      :progresses__step_id,
+      :progresses__started_at,
+      :progresses__finished_at
+    )
   end
 
   def to_hash(options = {})
