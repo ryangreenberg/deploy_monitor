@@ -29,6 +29,11 @@ App.prototype.bootDomReady = function() {
     this.activeDeploy.startPeriodicUpdates();
   }
 
+  $('[data-add-tooltips]').each(function(){
+    var tooltipSelector = $(this).attr('data-add-tooltips');
+    $(this).tooltip({selector: tooltipSelector});
+  });
+
   this.timeDisplay.makeTimesLocal();
 };
 
