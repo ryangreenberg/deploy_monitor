@@ -34,4 +34,32 @@ describe StepStatistics do
       assert_equal nil, stats.completion_rate_for_step_id(1)
     end
   end
+
+  describe "#mean_duration_for_step_id" do
+    it "is the average of the durations for the progresses for the step" do
+      steps = [
+        TestStruct.new(:id => 2)
+      ]
+      progresses = [
+        TestStruct.new(:step_id => 2, :duration => 10),
+        TestStruct.new(:step_id => 2, :duration => 20)
+      ]
+      stats = StepStatistics.new(steps, progresses)
+      assert_equal 15, stats.mean_duration_for_step_id(2)
+    end
+
+    it "ignores progresses for other steps" do
+      steps = [
+        TestStruct.new(:id => 2)
+      ]
+      progresses = [
+        TestStruct.new(:step_id => 2, :duration => 10),
+        TestStruct.new(:step_id => 3, :duration => 30)
+      ]
+      stats = StepStatistics.new(steps, progresses)
+      assert_equal 10, stats.mean_duration_for_step_id(2)
+    end
+
+    it "ignores progresses that are active"
+  end
 end
