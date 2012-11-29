@@ -1,5 +1,7 @@
 # Deploy Monitor
 
+[![Build Status](https://secure.travis-ci.org/ryangreenberg/deploy_monitor.png?branch=master)](https://travis-ci.org/ryangreenberg/deploy_monitor)
+
 Deploy Monitor is a small web application for tracking the deploy process of your systems.
 
 - Get an overview of active and recent deploys.
