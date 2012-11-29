@@ -14,6 +14,10 @@ class StepStatistics
     end
   end
 
+  def mean_duration_for_step(step)
+    mean_duration_for_step_id(step.id)
+  end
+
   def mean_duration_for_step_id(step_id)
     with_completed_progresses(step_id) do |progresses, completed|
       completed.inject(0.0) {|sum, ea| sum + ea.duration } / completed.count
