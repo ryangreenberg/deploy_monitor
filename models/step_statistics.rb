@@ -20,7 +20,12 @@ class StepStatistics
 
   def mean_duration_for_step_id(step_id)
     progresses_for_step = @progresses.select {|ea| ea.step_id == step_id }
-    progresses_for_step.inject(0.0) {|sum, ea| sum + ea.duration } / progresses_for_step.size
+    if progresses_for_step.empty?
+      nil
+    else
+      completed = progresses_for_step.select {|ea| ea.complete? }
+      completed.inject(0.0) {|sum, ea| sum + ea.duration } / completed.count
+    end
   end
 
   def size
