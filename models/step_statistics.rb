@@ -2,6 +2,11 @@ class StepStatistics
   def initialize(steps, progresses)
     @steps = @steps
     @progresses = progresses
+
+    # Memoization
+    @completion_rates = {}
+    @mean_durations = {}
+    @median_durations = {}
   end
 
   def completion_rate_for_step(step)
@@ -9,8 +14,10 @@ class StepStatistics
   end
 
   def completion_rate_for_step_id(step_id)
-    with_completed_progresses(step_id) do |progresses, completed|
-      completed.count.to_f / progresses.count
+    @completion_rates[step_id] ||= begin
+        with_completed_progresses(step_id) do |progresses, completed|
+        completed.count.to_f / progresses.count
+      end
     end
   end
 
@@ -19,9 +26,11 @@ class StepStatistics
   end
 
   def mean_duration_for_step_id(step_id)
-    with_completed_progresses(step_id) do |progresses, completed|
-      stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
-      stats.mean
+    @mean_durations[step_id] ||= begin
+      with_completed_progresses(step_id) do |progresses, completed|
+        stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
+        stats.mean
+      end
     end
   end
 
@@ -30,9 +39,11 @@ class StepStatistics
   end
 
   def median_duration_for_step_id(step_id)
-    with_completed_progresses(step_id) do |progresses, completed|
-      stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
-      stats.median
+    @median_durations[step_id] ||= begin
+      with_completed_progresses(step_id) do |progresses, completed|
+        stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
+        stats.median
+      end
     end
   end
 
