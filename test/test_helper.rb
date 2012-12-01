@@ -33,5 +33,5 @@ end
 
 # Makes `TestStruct.new(:id => 5).id` work
 class TestStruct < OpenStruct
-  undef id
+  undef id if respond_to?(:id)
 end

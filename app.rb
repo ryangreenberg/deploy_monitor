@@ -4,6 +4,7 @@ require 'ostruct'
 require 'yaml'
 
 # rubygems
+require 'descriptive-statistics'
 require 'json'
 require 'sinatra'
 require 'sinatra/partial'

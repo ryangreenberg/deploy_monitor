@@ -16,8 +16,7 @@ describe DeployMonitor::Web do
       stub(System).filter { [ sys ] }
 
       get "/systems/a_system/active_deploy"
-      follow_redirect!
-      assert_equal 'http://example.org/deploys/123', last_request.url
+      assert_equal 'http://example.org/deploys/123', last_response.location
     end
 
     it "redirects to system page if no deploy is active" do
@@ -27,8 +26,7 @@ describe DeployMonitor::Web do
       stub(System).filter { [ sys ] }
 
       get "/systems/a_system/active_deploy"
-      follow_redirect!
-      assert_equal 'http://example.org/systems/my_system_name', last_request.url
+      assert_equal 'http://example.org/systems/my_system_name', last_response.location
     end
 
     it "returns 404 if the system cannot be found" do

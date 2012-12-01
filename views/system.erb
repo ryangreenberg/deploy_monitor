@@ -1,6 +1,19 @@
 <div class="row">
   <h2 class="span12"><%== @system.name %></h2>
 
+  <div class="span12">
+    <div class="system-step-overview progress" data-add-tooltips=".bar">
+      <%
+        step_durations = @system.steps.map {|ea| @step_stats.mean_duration_for_step(ea).round }
+        total_duration = step_durations.inject(:+)
+        color_classes = ['bar-warning', 'bar-success', 'bar-danger', 'bar-info'].cycle
+      %>
+      <% @system.steps.zip(step_durations).each do |step, duration| %>
+        <div title="<%== step.description %>" class="bar <%= color_classes.next %>" style="width: <%== duration.to_f / total_duration * 100 %>%;"></div>
+      <% end %>
+    </div>
+  </div>
+
   <div class="span6">
     <h2 class="section-header">Deploy Steps</h2>
 
@@ -9,6 +22,7 @@
         <tr>
           <th>Description</th>
           <th>Completion Rate</th>
+          <th>Duration</th>
         </tr>
       </thead>
 
@@ -16,6 +30,7 @@
       <tr>
         <td><%== step.description %></td>
         <td><%== format_percent(@step_stats.completion_rate_for_step(step), 1) %>%</td>
+        <td><%== format_hms("(%?Hh) %Mm %Ss", @step_stats.mean_duration_for_step(step).round) %></td>
       </tr>
       <% end %>
     </table>
