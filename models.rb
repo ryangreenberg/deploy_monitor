@@ -17,6 +17,7 @@ require 'models/deploy'
 require 'models/progress'
 
 # Pure Ruby
+require 'models/dataset_pagination'
 require 'models/deploy_prediction'
 require 'models/step_statistics'
 require 'models/system_statistics'
