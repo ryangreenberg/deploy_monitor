@@ -42,4 +42,14 @@ module ViewsHelpers
     rounded_val = (value * 10**(2 + digits)).round.to_f / 10**(digits)
     digits == 0 ? rounded_val.to_i : rounded_val
   end
+
+  def color_for_completion_rate(percentage)
+    if percentage >= 0.95
+      'bar-success'
+    elsif percentage >= 0.85
+      'bar-warning'
+    else
+      'bar-danger'
+    end
+  end
 end

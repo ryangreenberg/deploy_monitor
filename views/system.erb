@@ -3,13 +3,12 @@
 
   <div class="span12">
     <div class="system-step-overview progress" data-add-tooltips=".bar">
-      <%
-        step_durations = @system.steps.map {|ea| @step_stats.mean_duration_for_step(ea).round }
-        total_duration = step_durations.inject(:+)
-        color_classes = ['bar-warning', 'bar-success', 'bar-danger', 'bar-info'].cycle
-      %>
-      <% @system.steps.zip(step_durations).each do |step, duration| %>
-        <div title="<%== step.description %>" class="bar <%= color_classes.next %>" style="width: <%== duration.to_f / total_duration * 100 %>%;"></div>
+      <% @step_display.each do |step, stats| %>
+        <div title="<%== step.description %> (<%= format_percent(stats[:completion_rate], 1) %>%)"
+          class="bar <%= color_for_completion_rate(stats[:completion_rate]) %>"
+          style="width: <%== stats[:distorted_duration_percentage] %>%;">
+          <div class="bar-spacer"></div>
+        </div>
       <% end %>
     </div>
   </div>
