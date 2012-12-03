@@ -54,3 +54,9 @@ tr > *:first-child {
 .step-list {
   font-size: 14px;
 }
+
+.bar-spacer {
+  height: 100%;
+  width: 1px;
+  background: #fff;
+}
