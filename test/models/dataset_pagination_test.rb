@@ -21,6 +21,12 @@ describe DatasetPagination do
       assert_includes ds.sql, "LIMIT #{user_limit}"
     end
 
+    it "accepts a user limit provided as a string" do
+      user_limit = "50"
+      ds = @dataset_pagination.paged_dataset(user_limit)
+      assert_includes ds.sql, "LIMIT #{user_limit}"
+    end
+
     it "uses the default limit if the user limit is above the max allowed" do
       user_limit = @max_limit + 1
       ds = @dataset_pagination.paged_dataset(user_limit)
@@ -29,6 +35,12 @@ describe DatasetPagination do
 
     it "uses the user offset when provided" do
       user_offset = 25
+      ds = @dataset_pagination.paged_dataset(nil, user_offset)
+      assert_includes ds.sql, "OFFSET #{user_offset}"
+    end
+
+    it "accepts a user offset provided as a string" do
+      user_offset = "25"
       ds = @dataset_pagination.paged_dataset(nil, user_offset)
       assert_includes ds.sql, "OFFSET #{user_offset}"
     end

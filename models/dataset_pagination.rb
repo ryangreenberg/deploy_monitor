@@ -13,7 +13,7 @@ class DatasetPagination
   private
 
   def user_or_default_limit(user_limit)
-    if user_limit && user_limit > @max_limit
+    if user_limit && user_limit.to_i > @max_limit
       @max_limit
     elsif user_limit
       user_limit
