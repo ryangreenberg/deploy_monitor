@@ -2,6 +2,8 @@ require 'errors'
 
 class DeployMonitor::API < Sinatra::Base
   API_DOCS = Maruku.new(File.read("README_API.md")).to_html
+  DEFAULT_PAGE_ITEMS = 25
+  MAX_PAGE_ITEMS = 100
 
   get '/' do
     erb API_DOCS
@@ -97,7 +99,11 @@ class DeployMonitor::API < Sinatra::Base
       active_status = params[:active] == 'true'
       deploys = deploys.filter(:active => active_status)
     end
-    {:deploys => deploys.all }.to_json
+
+    pagination = DatasetPagination.new(deploys, DEFAULT_PAGE_ITEMS, MAX_PAGE_ITEMS)
+    deploys_page = pagination.paged_dataset(params[:limit], params[:offset])
+
+    {:deploys => deploys_page.all }.to_json
   end
 
   post '/systems/:system/deploys' do
