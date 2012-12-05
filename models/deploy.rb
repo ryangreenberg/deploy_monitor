@@ -31,10 +31,7 @@ class Deploy < Sequel::Model
 
   def completion_probability
     progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
-
-    # TODO: An obvious optimization here would be to provide ProgressStatistics
-    # with the Sequel dataset instead of individual objects to defer the lookup
-    stats = StepStatistics.new(system.steps, progresses.all)
+    stats = LazyStepStatistics.new(system.steps_dataset, progresses)
     prediction = DeployPrediction.new(self, stats)
     prediction.completion_probability
   end

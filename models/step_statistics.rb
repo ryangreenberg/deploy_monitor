@@ -1,4 +1,6 @@
 class StepStatistics
+  attr_reader :steps, :progresses
+
   def initialize(steps, progresses)
     @steps = @steps
     @progresses = progresses
@@ -48,17 +50,17 @@ class StepStatistics
   end
 
   def size
-    @progresses.size
+    progresses.size
   end
 
   def empty?
-    @progresses.empty?
+    progresses.empty?
   end
 
   private
 
   def with_completed_progresses(step_id)
-    progresses_for_step = @progresses.select {|ea| ea.step_id == step_id }
+    progresses_for_step = progresses.select {|ea| ea.step_id == step_id }
     if progresses_for_step.empty?
       nil
     else
