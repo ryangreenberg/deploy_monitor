@@ -3,6 +3,7 @@ require 'erubis'
 class DeployMonitor::Web < Sinatra::Base
   include TimeUtils
   include ViewsHelpers
+  DEFAULT_DEPLOY_COUNT = 20
 
   register Sinatra::Partial
   set :partial_template_engine, :erb
@@ -10,7 +11,7 @@ class DeployMonitor::Web < Sinatra::Base
   get '/' do
     @systems = System.all
     @active_deploys = Deploy.filter(:active => true).order(:started_at.desc)
-    @past_deploys = Deploy.filter(:active => false).order(:finished_at.desc).limit(10)
+    @past_deploys = Deploy.filter(:active => false).order(:finished_at.desc).limit(DEFAULT_DEPLOY_COUNT)
     erb :index
   end
 
@@ -27,7 +28,7 @@ class DeployMonitor::Web < Sinatra::Base
     @stats = SystemStatistics.new(@system)
     @step_stats = StepStatistics.new(@system.steps, @system.progresses_from_recent_deploys.all)
     @step_display = StepDisplay.new(@system.steps, @step_stats)
-    @recent_deploys = Deploy.filter(:system => @system).order(:updated_at.desc).limit(10)
+    @recent_deploys = Deploy.filter(:system => @system).order(:updated_at.desc).limit(DEFAULT_DEPLOY_COUNT)
     erb :system
   end
 
@@ -43,7 +44,7 @@ class DeployMonitor::Web < Sinatra::Base
     deploys = Deploy.filter(:active => false).
       where {|o| o.finished_at >= updated_at }.
       order(:finished_at.desc).
-      limit(10)
+      limit(DEFAULT_DEPLOY_COUNT)
 
     deploy_htmls = deploys.map do |deploy|
       partial( :deploy_row, :locals => { :include_system => true, :deploy => deploy} )
