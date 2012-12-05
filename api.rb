@@ -101,7 +101,7 @@ class DeployMonitor::API < Sinatra::Base
     end
 
     pagination = DatasetPagination.new(deploys, DEFAULT_PAGE_ITEMS, MAX_PAGE_ITEMS)
-    deploys_page = pagination.dataset_page(params[:limit], params[:offset])
+    deploys_page = pagination.paged_dataset(params[:limit], params[:offset])
 
     {:deploys => deploys_page.all }.to_json
   end

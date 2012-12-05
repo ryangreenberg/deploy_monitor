@@ -5,7 +5,7 @@ class DatasetPagination
     @max_limit = max_limit
   end
 
-  def dataset_page(user_limit = nil, user_offset = nil)
+  def paged_dataset(user_limit = nil, user_offset = nil)
     limit = user_or_default_limit(user_limit)
     @dataset.limit(limit, user_offset)
   end
