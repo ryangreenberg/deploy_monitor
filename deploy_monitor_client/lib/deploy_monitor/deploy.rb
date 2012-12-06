@@ -3,10 +3,17 @@ module DeployMonitor
     include DeployMonitor::ApiObject
     include DeployMonitor::ApiErrors
 
-    TIMESTAMPS = [:created_at, :updated_at, :started_at, :finished_at]
+    TIMESTAMPS = [
+      :created_at,
+      :updated_at,
+      :started_at,
+      :finished_at,
+      :predicted_finished_at
+    ]
 
     attr_accessor :client, :system
-    attr_reader :deploy_id, :active, :progress, :metadata, :completion_probability, *TIMESTAMPS
+    attr_reader :deploy_id, :active, :progress, :metadata,
+      :completion_probability, *TIMESTAMPS
 
     def self.from_api(client, api_obj)
       deploy = self.new
@@ -34,6 +41,7 @@ module DeployMonitor
       @updated_at = api_obj['updated_at'] ? Time.at(api_obj['updated_at']) : nil
       @started_at = api_obj['started_at'] ? Time.at(api_obj['started_at']) : nil
       @finished_at = api_obj['finished_at'] ? Time.at(api_obj['finished_at']) : nil
+      @predicted_finished_at = api_obj['predicted_finished_at'] ? Time.at(api_obj['predicted_finished_at']) : nil
     end
 
     def update_from_json(json)
