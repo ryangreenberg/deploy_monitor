@@ -29,12 +29,24 @@ class Deploy < Sequel::Model
     end
   end
 
-  def completion_probability
-    progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
-    stats = LazyStepStatistics.new(system.steps_dataset, progresses)
-    prediction = DeployPrediction.new(self, stats)
-    prediction.completion_probability
+  module Prediction
+    def prediction
+      @prediction ||= begin
+        progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
+        stats = LazyStepStatistics.new(system.steps_dataset, progresses)
+        DeployPrediction.new(self, stats)
+      end
+    end
+
+    def completion_probability
+      prediction.completion_probability
+    end
+
+    def completion_eta
+      prediction.completion_eta
+    end
   end
+  include Prediction
 
   module Steps
     def current_step
@@ -165,8 +177,9 @@ class Deploy < Sequel::Model
       # Provide metadata
       hsh[:metadata] = metadata
 
-      # Provide completion probability
+      # Predictions
       hsh[:completion_probability] = completion_probability
+      hsh[:predicted_finished_at] = completion_eta.to_i
 
       hsh
     end

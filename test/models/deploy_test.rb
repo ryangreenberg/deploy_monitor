@@ -21,6 +21,7 @@ describe Deploy do
           :started_at => now,
           :finished_at => now
         }))
+        stub(deploy).completion_eta { Time.now }
         hsh = deploy.to_hash
         assert_equal now_timestamp, hsh[:created_at]
         assert_equal now_timestamp, hsh[:updated_at]
@@ -31,7 +32,16 @@ describe Deploy do
       it "includes the completion probability" do
         deploy = Deploy.new(@default_attrs)
         stub(deploy).completion_probability { 0.50 }
+        stub(deploy).completion_eta { Time.now }
         assert 0.50, deploy.to_hash[:completion_probability]
+      end
+
+      it "includes the completion ETA as a timestamp" do
+        now = Time.now
+        deploy = Deploy.new(@default_attrs)
+        stub(deploy).completion_probability { 0.50 }
+        stub(deploy).completion_eta { now }
+        assert now.to_i, deploy.to_hash[:predicted_finished_at]
       end
     end
   end
