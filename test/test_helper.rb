@@ -4,6 +4,7 @@ require 'rack/test'
 require 'minitest/mock'
 require 'minitest/autorun'
 require 'rr'
+require 'timecop'
 require 'ostruct'
 
 # Use in-memory database for tests

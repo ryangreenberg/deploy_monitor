@@ -17,6 +17,23 @@ class DeployPrediction
     success_rates.inject(1.0) {|accum, ea| accum * ea }
   end
 
+  def completion_eta
+    return @deploy.finished_at unless @deploy.active?
+
+    future_steps = @deploy.future_steps
+    durations = future_steps.map {|step| @step_stats.mean_duration_for_step_id(step.id) }
+    future_steps_duration = durations.empty? ? 0 : durations.inject(:+)
+
+    current_progress = @deploy.current_progress
+    current_progress_duration = @step_stats.mean_duration_for_step_id(current_progress.step_id)
+    current_progress_remaining = [
+      0,
+      current_progress_duration - (Time.now - current_progress.started_at)
+    ].max
+
+    Time.now + current_progress_remaining + future_steps_duration
+  end
+
   private
 
   def obvious_probability
