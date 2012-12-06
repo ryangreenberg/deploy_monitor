@@ -7,9 +7,14 @@ body {
   margin: 20px 0px 10px 0px;
 }
 
+.system-name {
+  font-size: 24px;
+  margin: 0;
+}
+
 .system-name .status {
   color: #aaa;
-  font-size: 60%;
+  font-size: 18px;
   text-transform: uppercase;
   font-weight: normal;
 }
