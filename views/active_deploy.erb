@@ -4,15 +4,15 @@
     <a href="/systems/<%== system.name %>"><%== system.name %></a>
     <span class="status">
       <a href="/deploys/<%= deploy.id %>">In progress</a> &middot;
-      <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="(%?H:)%M:%S"><%= format_hms("(%?H:)%M:%S", deploy.duration) %></span> ago</span>
+      <span class="started-at">Started <span class="timer" data-timestamp="<%= deploy.started_at.to_i %>" data-format="(%?h:)%M:%S"><%= format_hms("(%?H:)%M:%S", deploy.duration) %></span> ago</span>
     </span>
   </h2>
 
   <div class="deploy-progress">
     <% if deploy.current_progress %>
-      <h3 class="current-progress-wrapper">
+      <p class="current-progress-wrapper">
         <span class="current-progress"><%== deploy.current_progress.step.description %></span>&hellip;
-      </h3>
+      </p>
     <% end %>
 
     <div class="deploy-progress-bar progress progress-striped active">
