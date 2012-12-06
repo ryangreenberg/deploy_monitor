@@ -37,11 +37,11 @@ module DeployMonitor
       @metadata = api_obj['metadata']
       @completion_probability = api_obj['completion_probability']
 
-      @created_at = api_obj['created_at'] ? Time.at(api_obj['created_at']) : nil
-      @updated_at = api_obj['updated_at'] ? Time.at(api_obj['updated_at']) : nil
-      @started_at = api_obj['started_at'] ? Time.at(api_obj['started_at']) : nil
-      @finished_at = api_obj['finished_at'] ? Time.at(api_obj['finished_at']) : nil
-      @predicted_finished_at = api_obj['predicted_finished_at'] ? Time.at(api_obj['predicted_finished_at']) : nil
+      @created_at = time_or_nil(api_obj['created_at'])
+      @updated_at = time_or_nil(api_obj['updated_at'])
+      @started_at = time_or_nil(api_obj['started_at'])
+      @finished_at = time_or_nil(api_obj['finished_at'])
+      @predicted_finished_at = time_or_nil(api_obj['predicted_finished_at'])
     end
 
     def update_from_json(json)
@@ -102,6 +102,12 @@ module DeployMonitor
       rescue RestClient::Exception
         false
       end
+    end
+
+    private
+
+    def time_or_nil(val)
+      val ? Time.at(val) : nil
     end
   end
 end
