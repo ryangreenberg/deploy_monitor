@@ -17,5 +17,4 @@ group :development, :test do
   gem 'rr'
   gem 'rake'
   gem 'timecop'
-  gem 'ruby-debug'
 end
