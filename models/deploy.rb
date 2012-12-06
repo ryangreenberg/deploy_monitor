@@ -179,7 +179,7 @@ class Deploy < Sequel::Model
 
       # Predictions
       hsh[:completion_probability] = completion_probability
-      hsh[:completion_eta] = completion_eta.to_i
+      hsh[:predicted_finished_at] = completion_eta.to_i
 
       hsh
     end

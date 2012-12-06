@@ -41,7 +41,7 @@ describe Deploy do
         deploy = Deploy.new(@default_attrs)
         stub(deploy).completion_probability { 0.50 }
         stub(deploy).completion_eta { now }
-        assert now.to_i, deploy.to_hash[:completion_eta]
+        assert now.to_i, deploy.to_hash[:predicted_finished_at]
       end
     end
   end
