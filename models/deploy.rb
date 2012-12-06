@@ -29,19 +29,24 @@ class Deploy < Sequel::Model
     end
   end
 
-  def completion_probability
-    progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
-    stats = LazyStepStatistics.new(system.steps_dataset, progresses)
-    prediction = DeployPrediction.new(self, stats)
-    prediction.completion_probability
-  end
+  module Prediction
+    def prediction
+      @prediction ||= begin
+        progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
+        stats = LazyStepStatistics.new(system.steps_dataset, progresses)
+        DeployPrediction.new(self, stats)
+      end
+    end
 
-  def completion_eta
-    progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
-    stats = LazyStepStatistics.new(system.steps_dataset, progresses)
-    prediction = DeployPrediction.new(self, stats)
-    prediction.completion_eta
+    def completion_probability
+      prediction.completion_probability
+    end
+
+    def completion_eta
+      prediction.completion_eta
+    end
   end
+  include Prediction
 
   module Steps
     def current_step
