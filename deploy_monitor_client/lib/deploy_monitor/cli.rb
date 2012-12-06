@@ -69,9 +69,15 @@ module DeployMonitor
         @deploy = @system.current_deploy
         say("Resumed deploy #{@deploy.deploy_id}")
       end
-      if @deploy.completion_probability
-        say("Probability of completion: #{(@deploy.completion_probability * 100).round}%")
+      if @deploy.predicted_finished_at
+        expected_duration_mins = ((@deploy.predicted_finished_at - Time.now) / 60).round
+        pretty_time = @deploy.predicted_finished_at.strftime('%H:%M')
+        say("Deploy should be complete in #{expected_duration_mins} minutes at #{pretty_time}")
       end
+      if @deploy.completion_probability
+        say("(#{(@deploy.completion_probability * 100).round}% chance of success)")
+      end
+
       prompt_for_deploy_steps
     end
 
