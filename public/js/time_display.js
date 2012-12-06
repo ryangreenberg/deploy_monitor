@@ -48,6 +48,7 @@
 
     return formatStr
       .replace(/\(%\?H(.*?)\)/, h > 0 ? padWithZeros(h, 2) + "$1": '')
+      .replace(/\(%\?h(.*?)\)/, h > 0 ? h + "$1": '')
       .replace(/%H/, padWithZeros(h, 2))
       .replace(/%M/, padWithZeros(m, 2))
       .replace(/%S/, padWithZeros(s, 2))
