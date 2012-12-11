@@ -40,12 +40,32 @@ class DeployMonitor::API < Sinatra::Base
     {:steps => system.steps }.to_json
   end
 
+  post '/systems/:system/locks' do
+    system_name = params[:system]
+    system = System.filter(:name => system_name).first
+    halt 404, Errors.format(:not_found, "System '#{system_name}'") unless system
+
+    existing_lock = SystemLock.filter(:system => system, :active => true).first
+    if existing_lock
+      halt 400, Errors.format(:duplicate_entity, "Active lock", existing_lock.id)
+    end
+
+    lock = system.lock!(:description => params[:description])
+
+    [201, lock.to_json]
+  end
+
+  put '/locks/:lock_id' do
+    lock = Lock[params[:lock_id]]
+    halt 404, Errors.format(:not_found, "lock id #{params[:lock_id]}") unless lock
+
+    lock.to_json
+  end
+
   post '/systems/:system/steps' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
-    if system.nil?
-      halt 404, Errors.format(:not_found, "System '#{system_name}'") unless system
-    end
+    halt 404, Errors.format(:not_found, "System '#{system_name}'") unless system
 
     name = params[:name]
     description = params[:description] || ""
@@ -109,9 +129,7 @@ class DeployMonitor::API < Sinatra::Base
   post '/systems/:system/deploys' do
     system_name = params[:system]
     system = System.filter(:name => system_name).first
-    if system.nil?
-      halt 404, Errors.format(:not_found, "System '#{system_name}'")
-    end
+    halt 404, Errors.format(:not_found, "System '#{system_name}'") unless system
 
     active_deploy = Deploy.active.filter(:system => system).first
     if active_deploy

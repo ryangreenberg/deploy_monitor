@@ -1,6 +1,7 @@
 class System < Sequel::Model
   one_to_many :steps, :order => :number.asc
   one_to_many :deploys
+  one_to_many :system_locks
 
   def active_deploy
     Deploy.filter(:system => self, :active => true).first
@@ -35,6 +36,15 @@ class System < Sequel::Model
       :progresses__step_id,
       :progresses__started_at,
       :progresses__finished_at
+    )
+  end
+
+  def lock!(params)
+    SystemLock.create(
+      :description => params[:description],
+      :system => self,
+      :active => true,
+      :started_at => Time.now
     )
   end
 

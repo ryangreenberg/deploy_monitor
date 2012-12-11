@@ -12,6 +12,7 @@ require 'models/resultable'
 
 # DB
 require 'models/system'
+require 'models/system_lock'
 require 'models/step'
 require 'models/deploy'
 require 'models/progress'
