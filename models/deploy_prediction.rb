@@ -34,6 +34,19 @@ class DeployPrediction
     Time.now + current_progress_remaining + future_steps_duration
   end
 
+  def completion_time_bounds(time = completion_eta)
+    return [@deploy.finished_at, @deploy.finished_at] unless @deploy.active?
+
+    remaining_steps = @deploy.remaining_steps
+    std_devs = remaining_steps.map {|step| @step_stats.std_dev_duration_for_step_id(step.id) }
+    std_dev_sum = std_devs.empty? ? 0 : std_devs.inject(:+)
+
+    lower_bounds = [time - std_dev_sum, Time.now].max
+    upper_bounds = time + std_dev_sum
+
+    [lower_bounds, upper_bounds]
+  end
+
   private
 
   def obvious_probability
