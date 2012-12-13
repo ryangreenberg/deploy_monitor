@@ -51,7 +51,7 @@ class Deploy < Sequel::Model
   module Steps
     def current_step
       if active && cur_progress = current_progress
-        current_progress.step
+        cur_progress.step
       else
         nil
       end
