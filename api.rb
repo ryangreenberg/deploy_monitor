@@ -5,7 +5,12 @@ class DeployMonitor::API < Sinatra::Base
   DEFAULT_PAGE_ITEMS = 25
   MAX_PAGE_ITEMS = 100
 
+  before do
+    content_type 'application/json'
+  end
+
   get '/' do
+    content_type 'text/html'
     erb API_DOCS
   end
 
