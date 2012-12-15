@@ -38,6 +38,14 @@ class System < Sequel::Model
     )
   end
 
+  def step_statistics(num_deploys_to_consider = 100)
+    StepStatistics.new(steps, progresses_from_recent_deploys(num_deploys_to_consider).all)
+  end
+
+  def sql_step_statistics(num_deploys_to_consider = 100)
+    SqlStepStatistics.new(steps_dataset, progresses_from_recent_deploys(num_deploys_to_consider))
+  end
+
   def to_hash(options = {})
     hsh = values
     if options[:include_steps]

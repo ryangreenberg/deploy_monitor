@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby -KU -rubygems
+require 'app'
+
+sys = System.first
+steps = sys.steps_dataset.order_by(:id)
+stats = sys.step_statistics
+sql_stats = sys.sql_step_statistics
+
+puts "Comparing statistics implementations for #{steps.count} steps of system #{sys.name}"
+
+methods_to_compare = [
+  :completion_rate_for_step,
+  :mean_duration_for_step
+]
+
+def float_diff(a, b)
+  ((a - b) * 10000).round / 10000.to_f
+end
+
+significant_differences = []
+
+methods_to_compare.each do |meth|
+
+  # Header
+  puts "#{meth.to_s.upcase}"
+  puts "%4s %10s %10s %10s" % %w|Step Ruby SQL Diff|
+
+  steps.each do |ea|
+    ruby_value = stats.send(meth, ea)
+    sql_value = sql_stats.send(meth, ea)
+    diff = float_diff(ruby_value, sql_value)
+    is_significant = diff.abs > 0.01
+    sig_flag = is_significant ? "!" : ""
+
+    puts "%4d %10f %10f %10f %s" % [ea.id, ruby_value, sql_value, diff, sig_flag]
+    significant_differences << [meth, ea, ruby_value, sql_value] if is_significant
+  end
+
+  puts ""
+end
+
+unless significant_differences.empty?
+  puts "Found significant differences in method implementations"
+  significant_differences.each do |meth, ea, ruby_value, sql_value|
+    puts "- #{meth}(#{ea.id})\t#{ruby_value}\t#{sql_value}"
+  end
+  exit(1)
+end
