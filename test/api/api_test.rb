@@ -7,6 +7,18 @@ describe DeployMonitor::API do
     DeployMonitor::API
   end
 
+  describe "all requests" do
+    it "returns documentation as text/html" do
+      get "/"
+      assert_includes last_response.content_type, "text/html"
+    end
+
+    it "returns data with an application/json content-type" do
+      get "/systems"
+      assert_includes last_response.content_type, "application/json"
+    end
+  end
+
   describe "GET /deploys/:id" do
     it "returns 404 when provided deploy does not exist" do
       non_existent_deploy = 123

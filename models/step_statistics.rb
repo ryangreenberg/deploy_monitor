@@ -2,7 +2,7 @@ class StepStatistics
   attr_reader :steps, :progresses
 
   def initialize(steps, progresses)
-    @steps = @steps
+    @steps = steps
     @progresses = progresses
 
     # Memoization

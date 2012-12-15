@@ -51,7 +51,7 @@ class Deploy < Sequel::Model
   module Steps
     def current_step
       if active && cur_progress = current_progress
-        current_progress.step
+        cur_progress.step
       else
         nil
       end
@@ -66,6 +66,8 @@ class Deploy < Sequel::Model
       end
     end
 
+    # TODO: Can be rewritten as a single query:
+    # SELECT * FROM steps WHERE number >= (current step number subselect)
     def remaining_steps
       ([ current_step ] + future_steps.map {|ea| ea}).compact
     end
