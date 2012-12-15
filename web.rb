@@ -41,7 +41,7 @@ class DeployMonitor::Web < Sinatra::Base
     @system = System.filter(:name => params[:system_name]).first
     halt 404 unless @system
     deploy = @system.active_deploy
-    redirect (deploy ? Paths.for_deploy(deploy) : Paths.for_system(@system))
+    redirect(deploy ? Paths.for_deploy(deploy) : Paths.for_system(@system))
   end
 
   get '/recent_deploys' do
