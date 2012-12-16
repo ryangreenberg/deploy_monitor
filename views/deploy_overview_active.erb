@@ -10,6 +10,14 @@
   </span>
 </h2>
 
+<p>
+  <% lower_bound, upper_bound = deploy.completion_eta_bounds %>
+  This deploy is expected to complete in ~<%= ((deploy.completion_eta - Time.now) / 60).round %> minutes
+  (between <span class="local-time" data-timestamp="<%= lower_bound.to_i %>"><%= lower_bound %></span> and
+  <span class="local-time" data-timestamp="<%= upper_bound.to_i %>"><%= upper_bound %></span>)
+  with a <%= format_percent(deploy.completion_probability) %>% chance of success.
+</p>
+
 <% if deploy.current_progress %>
   <h3 class="current-progress-wrapper">
     <span class="current-progress"><%== deploy.current_progress.step.description %></span>&hellip;

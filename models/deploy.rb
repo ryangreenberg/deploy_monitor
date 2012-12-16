@@ -32,8 +32,7 @@ class Deploy < Sequel::Model
   module Prediction
     def prediction
       @prediction ||= begin
-        progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
-        stats = LazyStepStatistics.new(system.steps_dataset, progresses)
+        stats = system.sql_step_statistics(Models::DEFAULT_DEPLOY_STATS_WINDOW)
         DeployPrediction.new(self, stats)
       end
     end
@@ -44,6 +43,10 @@ class Deploy < Sequel::Model
 
     def completion_eta
       prediction.completion_eta
+    end
+
+    def completion_eta_bounds
+      prediction.completion_time_bounds
     end
   end
   include Prediction
@@ -182,6 +185,9 @@ class Deploy < Sequel::Model
       # Predictions
       hsh[:completion_probability] = completion_probability
       hsh[:predicted_finished_at] = completion_eta.to_i
+      lower_bound, upper_bound = completion_eta_bounds
+      hsh[:predicted_finished_at_lower_bound] = lower_bound.to_i
+      hsh[:predicted_finished_at_upper_bound] = upper_bound.to_i
 
       hsh
     end

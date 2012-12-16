@@ -121,4 +121,18 @@ describe StepStatistics do
       assert_equal nil, stats.median_duration_for_step_id(1)
     end
   end
+
+  describe "#std_dev_duration_for_step_id" do
+    it "is the pop. std. dev. of the durations for the progresses for the step" do
+      steps = [
+        TestStruct.new(:id => 2)
+      ]
+      progresses = [
+        TestStruct.new(:step_id => 2, :duration => 3, :complete? => true),
+        TestStruct.new(:step_id => 2, :duration => 7, :complete? => true)
+      ]
+      stats = StepStatistics.new(steps, progresses)
+      assert_equal 2.0, stats.std_dev_duration_for_step_id(2)
+    end
+  end
 end
