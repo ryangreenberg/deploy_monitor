@@ -6,6 +6,7 @@ class SqlStepStatistics
     @progresses_dataset = progresses_dataset
 
     @mean_durations = nil
+    @std_dev_durations = nil
     @progress_completions = nil
     @progress_counts = nil
   end
@@ -24,6 +25,14 @@ class SqlStepStatistics
 
   def mean_duration_for_step_id(step_id)
     mean_durations[step_id]
+  end
+
+  def std_dev_duration_for_step(step)
+    std_dev_duration_for_step_id(step.id)
+  end
+
+  def std_dev_duration_for_step_id(step_id)
+    std_dev_durations[step_id]
   end
 
   def median_duration_for_step(step)
@@ -47,6 +56,11 @@ class SqlStepStatistics
   def mean_durations
     fetch_db_stats unless @mean_durations
     @mean_durations
+  end
+
+  def std_dev_durations
+    fetch_duration_stats unless @std_dev_durations
+    @std_dev_durations
   end
 
   def progress_counts
@@ -74,7 +88,7 @@ class SqlStepStatistics
     @progress_completions = Hash[ progress_completions.map {|ea| [ea[:step_id], ea[:count]] } ]
   end
 
-  def fetch_db_stats
+  def fetch_duration_stats
     timestampdiff = Sequel.function(:TIMESTAMPDIFF, Sequel.lit("SECOND"), :progresses__started_at, :progresses__finished_at)
     stats_dataset = @progresses_dataset.select(
       :step_id,
