@@ -32,8 +32,7 @@ class Deploy < Sequel::Model
   module Prediction
     def prediction
       @prediction ||= begin
-        progresses = system.progresses_from_recent_deploys(Models::DEFAULT_DEPLOY_STATS_WINDOW)
-        stats = LazyStepStatistics.new(system.steps_dataset, progresses)
+        stats = system.sql_step_statistics(Models::DEFAULT_DEPLOY_STATS_WINDOW)
         DeployPrediction.new(self, stats)
       end
     end
