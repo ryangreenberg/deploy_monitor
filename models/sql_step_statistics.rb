@@ -54,7 +54,7 @@ class SqlStepStatistics
   private
 
   def mean_durations
-    fetch_db_stats unless @mean_durations
+    fetch_duration_stats unless @mean_durations
     @mean_durations
   end
 
@@ -69,7 +69,7 @@ class SqlStepStatistics
   end
 
   def progress_completions
-    fetch_completion_stats if @progress_completions.nil?
+    fetch_completion_stats unless @progress_completions
     @progress_completions
   end
 
