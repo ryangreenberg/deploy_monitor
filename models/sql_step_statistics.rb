@@ -1,9 +1,7 @@
-class SqlStepStatistics
-  attr_reader :steps, :progresses
-
+class SqlStepStatistics < StepStatistics
   def initialize(steps_dataset, progresses_dataset)
-    @steps_dataset = steps_dataset
-    @progresses_dataset = progresses_dataset
+    @steps = steps_dataset
+    @progresses = progresses_dataset
 
     @mean_durations = nil
     @std_dev_durations = nil
@@ -11,32 +9,16 @@ class SqlStepStatistics
     @progress_counts = nil
   end
 
-  def completion_rate_for_step(step)
-    completion_rate_for_step_id(step.id)
-  end
-
   def completion_rate_for_step_id(step_id)
     progress_completions[step_id].to_f / progress_counts[step_id]
-  end
-
-  def mean_duration_for_step(step)
-    mean_duration_for_step_id(step.id)
   end
 
   def mean_duration_for_step_id(step_id)
     mean_durations[step_id]
   end
 
-  def std_dev_duration_for_step(step)
-    std_dev_duration_for_step_id(step.id)
-  end
-
   def std_dev_duration_for_step_id(step_id)
     std_dev_durations[step_id]
-  end
-
-  def median_duration_for_step(step)
-    median_duration_for_step_id(step.id)
   end
 
   def median_duration_for_step_id(step_id)
@@ -44,11 +26,11 @@ class SqlStepStatistics
   end
 
   def size
-    progresses_dataset.count
+    progresses.count
   end
 
   def empty?
-    progresses_dataset.empty?
+    progresses.empty?
   end
 
   private
@@ -74,12 +56,12 @@ class SqlStepStatistics
   end
 
   def fetch_completion_stats
-    progress_completions = @progresses_dataset.select(
+    progress_completions = progresses.select(
       :step_id,
       Sequel.lit("COUNT(*)").as("count")
     ).filter(:progresses__result => Models::RESULTS[:complete]).group_by(:step_id)
 
-    progress_counts = @progresses_dataset.select(
+    progress_counts = progresses.select(
       :step_id,
       Sequel.lit("COUNT(*)").as("count")
     ).group_by(:step_id)
@@ -90,7 +72,7 @@ class SqlStepStatistics
 
   def fetch_duration_stats
     timestampdiff = Sequel.function(:TIMESTAMPDIFF, Sequel.lit("SECOND"), :progresses__started_at, :progresses__finished_at)
-    stats_dataset = @progresses_dataset.select(
+    stats_dataset = progresses.select(
       :step_id,
       Sequel.function(:AVG, timestampdiff).as(:avg),
       Sequel.function(:STDDEV_POP, timestampdiff).as(:std_dev)
