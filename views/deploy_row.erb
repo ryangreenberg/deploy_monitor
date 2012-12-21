@@ -16,6 +16,9 @@
     <% end %>
   </td>
   <td>
+    <%= deploy.get_metadata("deployer") %>
+  </td>
+  <td>
     <span class="<%= 'timer' if deploy.active %>" data-timestamp="<%= deploy.started_at.to_i %>" data-format="(%?Hh) %Mm %Ss"><%= format_hms("(%?Hh) %Mm %Ss", deploy.duration) %>
   </td>
 </tr>
