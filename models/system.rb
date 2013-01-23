@@ -48,6 +48,10 @@ class System < Sequel::Model
     )
   end
 
+  def locked?
+    SystemLock.filter(:system => self, :active => true).count != 0
+  end
+
   def step_statistics(num_deploys_to_consider = 100)
     StepStatistics.new(steps, progresses_from_recent_deploys(num_deploys_to_consider).all)
   end
