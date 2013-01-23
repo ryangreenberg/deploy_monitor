@@ -52,4 +52,8 @@ module ViewsHelpers
       'bar-danger'
     end
   end
+
+  def data_updated_at
+    %|data-updated-at="#{Time.now.to_i}"|
+  end
 end
