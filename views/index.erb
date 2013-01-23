@@ -1,4 +1,4 @@
-<div class="row active-deploys" style="margin-bottom: 20px" data-updated-at="<%= Time.now.to_i %>">
+<div class="row active-deploys" style="margin-bottom: 20px" <%= data_updated_at %>">
   <h2 class="span12 section-header">Active Deploys</h2>
   <div class="deploy-list">
     <% @active_deploys.each do |deploy| %>
@@ -16,7 +16,7 @@
 <div class="row">
   <div class="span12">
     <h2 class="section-header">Recent Deploys</h2>
-    <table class="table recent-deploys" data-updated-at="<%= Time.now.to_i %>">
+    <table class="table recent-deploys" <%= data_updated_at %>>
       <thead>
         <tr>
           <th>System</th>
