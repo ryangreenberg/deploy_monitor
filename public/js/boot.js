@@ -29,6 +29,10 @@ App.prototype.bootDomReady = function() {
     this.activeDeploy.startPeriodicUpdates();
   }
 
+  if ($('.system-lock').length) {
+    this.systemLock = new SystemLock($('.system-lock'));
+  }
+
   $('[data-add-tooltips]').each(function(){
     var tooltipSelector = $(this).attr('data-add-tooltips');
     $(this).tooltip({selector: tooltipSelector});

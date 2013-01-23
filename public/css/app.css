@@ -65,3 +65,24 @@ tr > *:first-child {
   width: 1px;
   background: #fff;
 }
+
+.system-lock {
+  margin-top: 6px;
+  float: right;
+}
+
+.locked .action-lock {
+  display: none;
+}
+
+.unlocked .action-unlock, .locked .action-unlock {
+  display: none;
+}
+
+.locked:hover .action-unlock {
+  display: inline;
+}
+
+.locked:hover .info-locked, .unlocked .info-locked {
+  display: none;
+}
