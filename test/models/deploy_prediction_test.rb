@@ -132,4 +132,53 @@ describe DeployPrediction do
       end
     end
   end
+
+  describe "#completion_time_bounds" do
+    before(:each) do
+      @deploy = Deploy.new(
+        :active => true
+      )
+      stub(@deploy).remaining_steps do
+        [
+          TestStruct.new(:id => 2),
+          TestStruct.new(:id => 3),
+          TestStruct.new(:id => 4)
+        ]
+      end
+      @progress_stats = StepStatistics.new([], [])
+      stub(@progress_stats).empty? { false }
+    end
+
+    it "is the deploy finished_at time for non-active deploys" do
+      past_time = Time.now - 10
+      stub(@deploy).active { false }
+      stub(@deploy).finished_at { past_time }
+      prediction = DeployPrediction.new(@deploy, @progress_stats)
+      assert_equal [past_time, past_time], prediction.completion_time_bounds(past_time)
+    end
+
+    it "uses the standard deviation of the remaining steps to add bounds to completion_eta" do
+      Timecop.freeze do
+        stub(@progress_stats).std_dev_duration_for_step_id(2) { 10 }
+        stub(@progress_stats).std_dev_duration_for_step_id(3) { 20 }
+        stub(@progress_stats).std_dev_duration_for_step_id(4) { 30 }
+
+        prediction = DeployPrediction.new(@deploy, @progress_stats)
+        eta = Time.now + 120
+        assert_equal [eta - 60, eta + 60], prediction.completion_time_bounds(eta)
+      end
+    end
+
+    it "does not provide lower bounds less than the current time" do
+      Timecop.freeze do
+        stub(@progress_stats).std_dev_duration_for_step_id(2) { 10 }
+        stub(@progress_stats).std_dev_duration_for_step_id(3) { 20 }
+        stub(@progress_stats).std_dev_duration_for_step_id(4) { 30 }
+
+        prediction = DeployPrediction.new(@deploy, @progress_stats)
+        eta = Time.now
+        assert_equal [eta, eta + 60], prediction.completion_time_bounds(eta)
+      end
+    end
+  end
 end

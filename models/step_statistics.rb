@@ -8,6 +8,7 @@ class StepStatistics
     # Memoization
     @completion_rates = {}
     @mean_durations = {}
+    @std_dev_durations = {}
     @median_durations = {}
   end
 
@@ -32,6 +33,22 @@ class StepStatistics
       with_completed_progresses(step_id) do |progresses, completed|
         stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
         stats.mean
+      end
+    end
+  end
+
+  def std_dev_duration_for_step(step)
+    std_dev_duration_for_step_id(step.id)
+  end
+
+  # This uses a population standard deviation because we're considering
+  # all the observations that we care about, but I don't know that much
+  # about statistics so that could be a bad idea.
+  def std_dev_duration_for_step_id(step_id)
+    @std_dev_durations[step_id] ||= begin
+      with_completed_progresses(step_id) do |progresses, completed|
+        stats = DescriptiveStatistics.new(completed.map {|ea| ea.duration})
+        stats.population_standard_deviation
       end
     end
   end

@@ -10,11 +10,12 @@ puts "Comparing statistics implementations for #{steps.count} steps of system #{
 
 methods_to_compare = [
   :completion_rate_for_step,
-  :mean_duration_for_step
+  :mean_duration_for_step,
+  :std_dev_duration_for_step,
 ]
 
 def float_diff(a, b)
-  ((a - b) * 10000).round / 10000.to_f
+  a - b
 end
 
 significant_differences = []

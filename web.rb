@@ -5,6 +5,7 @@ class DeployMonitor::Web < Sinatra::Base
   include ViewsHelpers
   DEFAULT_DEPLOY_COUNT = 20
   MAX_DEPLOY_COUNT = 100
+  DEFAULT_UPDATE_WINDOW = 10 # seconds
 
   register Sinatra::Partial
   set :partial_template_engine, :erb
@@ -45,7 +46,7 @@ class DeployMonitor::Web < Sinatra::Base
   end
 
   get '/recent_deploys' do
-    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - 10
+    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - DEFAULT_UPDATE_WINDOW
     deploys = Deploy.filter(:active => false).
       where {|o| o.finished_at >= updated_at }.
       order(:finished_at.desc).
@@ -62,7 +63,7 @@ class DeployMonitor::Web < Sinatra::Base
   end
 
   get '/active_deploy' do
-    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - 10
+    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - DEFAULT_UPDATE_WINDOW
     deploy = Deploy[params[:id]]
     halt 404 unless deploy
 
@@ -98,7 +99,7 @@ class DeployMonitor::Web < Sinatra::Base
   end
 
   get '/active_deploys' do
-    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - 10
+    updated_at = params[:updated_at] ? Time.at(params[:updated_at].to_i) : Time.now - DEFAULT_UPDATE_WINDOW
     new_deploys = Deploy.filter(:active => true).
       where {|o| o.started_at >= updated_at }
     # This should just return deploys that have progressed since the last updated at
