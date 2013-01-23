@@ -1,13 +1,20 @@
 <div class="row">
   <h2 class="span12">
     <%== @system.name %>
-    <div class="system-lock locked">
-      <button class="btn btn-medium btn-danger">
+    <% system_locked = @system.locked? %>
+    <% if system_locked %>
+    <form class="system-lock locked" action="/api/locks/<%= @system.active_lock.id %>" method="PUT">
+      <input type="hidden" name="active" value="false">
+    <% else %>
+    <form class="system-lock unlocked" action="/api/systems/<%== @system.name %>/locks" method="POST">
+    <% end %>
+
+      <button type="submit" class="btn btn-medium <%= "btn-danger" if system_locked %>">
         <span class="info-locked"><i class="icon-lock"></i> Locked</span>
         <span class="action-lock"><i class="icon-lock"></i> Lock</span>
         <span class="action-unlock"><i class="icon-unlock"></i> Unlock</span>
       </button>
-    </div>
+    </form>
   </h2>
 
   <div class="span12">

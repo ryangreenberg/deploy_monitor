@@ -61,8 +61,10 @@ class DeployMonitor::API < Sinatra::Base
   end
 
   put '/locks/:lock_id' do
-    lock = Lock[params[:lock_id]]
+    lock = SystemLock[params[:lock_id]]
     halt 404, Errors.format(:not_found, "lock id #{params[:lock_id]}") unless lock
+    lock.active = false if params[:active] == "false"
+    lock.save
 
     lock.to_json
   end

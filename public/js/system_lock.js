@@ -1,23 +1,33 @@
 function SystemLock ($node) {
   this.$node = $node;
-  $node.on('click', '.action-lock', this.lock.bind(this));
-  $node.on('click', '.action-unlock', this.unlock.bind(this));
+  $node.on('submit', this.lockOrUnlock.bind(this));
   $node.on('mouseenter', this.addHoverClasses.bind(this));
   $node.on('mouseleave', this.removeHoverClasses.bind(this));
 }
 
+SystemLock.prototype.lockOrUnlock = function(event) {
+  if (this.$node.hasClass('locked')) {
+    this.unlock();
+  } else {
+    this.lock();
+  }
+  return false;
+};
+
+
 SystemLock.prototype.lock = function() {
-  var lockMessage = prompt("Why are deploys for this system locked?");
+  var lockMessage = prompt("What is the reason for locking this system?");
   if (lockMessage) {
     this.$node.addClass('locked').removeClass('unlocked');
     var request = $.ajax({
       dataType: 'json',
-      data: {updated_at: lastUpdatedAt, id: deployId},
-      url: '/active_deploy'
+      url: this.$node.attr('action'),
+      type: "POST"
     });
 
-    request.done(this.display.bind(this));
-    request.complete(this.scheduleNextUpdate.bind(this));
+    request.done(function(){
+      this.$node.attr('action', '/api/locks/' + this.id);
+    });
   }
 };
 
@@ -25,6 +35,15 @@ SystemLock.prototype.unlock = function() {
   var unlockSystem = confirm("Are you sure you want to allow deploys for this system?");
   if (unlockSystem) {
     this.$node.addClass('unlocked').removeClass('locked');
+
+    var request = $.ajax({
+      dataType: 'json',
+      url: this.$node.attr('action'),
+      type: "PUT",
+      data: this.$node.serialize()
+    });
+
+    request.done(function(){ console.log(this); });
   }
 };
 
