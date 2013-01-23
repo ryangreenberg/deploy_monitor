@@ -1,5 +1,5 @@
 Sequel.migration do
-  up do    
+  up do
     create_table(:system_locks) do
       primary_key :id
       Integer :system_id, :null=>false
@@ -9,6 +9,10 @@ Sequel.migration do
       DateTime :finished_at
       DateTime :created_at
       DateTime :updated_at
+    end
+
+    alter_table(:system_locks) do
+      add_index :system_id
     end
   end
 
