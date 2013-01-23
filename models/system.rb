@@ -39,9 +39,9 @@ class System < Sequel::Model
     )
   end
 
-  def lock!(params)
+  def lock!(description = "")
     SystemLock.create(
-      :description => params[:description],
+      :description => description,
       :system => self,
       :active => true,
       :started_at => Time.now

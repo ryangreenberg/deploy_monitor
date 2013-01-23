@@ -55,7 +55,7 @@ class DeployMonitor::API < Sinatra::Base
       halt 400, Errors.format(:duplicate_entity, "Active lock", existing_lock.id)
     end
 
-    lock = system.lock!(:description => params[:description])
+    lock = system.lock!(params[:description] || "")
 
     [201, lock.to_json]
   end
