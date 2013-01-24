@@ -17,6 +17,7 @@ class StepDisplay
   end
 
   def each
+    return if steps.empty?
     build_collection_stats unless stats_built?
     steps.each_with_index do |ea, idx|
       details = {

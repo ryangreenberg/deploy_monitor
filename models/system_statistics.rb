@@ -25,10 +25,12 @@ class SystemStatistics
   end
 
   def avg_duration
+    return 0 if durations.empty?
     durations.inject(0) {|sum, ea| sum + ea } / durations.size.to_f
   end
 
   def median_duration
+    return 0 if durations.empty?
     sorted_durations = durations.sort
     count = sorted_durations.count
     if count.odd?
