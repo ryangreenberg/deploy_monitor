@@ -44,13 +44,9 @@ module ViewsHelpers
   end
 
   def color_for_completion_rate(percentage)
-    if percentage >= 0.95
-      'bar-success'
-    elsif percentage >= 0.85
-      'bar-warning'
-    else
-      'bar-danger'
-    end
+    percentages = %w|1.0 0.97 0.95 0.92 0.87 0.82 0.78 0.75 0.70|.map(&:to_f)
+    bar = percentages.detect {|ea| percentage >= ea }
+    "bar-#{(bar * 100).to_i}"
   end
 
   def data_updated_at
