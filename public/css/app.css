@@ -65,3 +65,57 @@ tr > *:first-child {
   width: 1px;
   background: #fff;
 }
+
+/* Progress Bar Colors */
+
+.progress .bar-100 {
+  background-color: #14e75f;
+  background-image: none;
+}
+
+.progress .bar-97 {
+  background-color: #6ff033;
+  background-image: none;
+}
+
+.progress .bar-95 {
+  background-color: #cdef10;
+  background-image: none;
+}
+
+.progress .bar-92 {
+  background-color: #f4e301;
+  background-image: none;
+}
+
+.progress .bar-87 {
+  background-color: #f7c500;
+  background-image: none;
+}
+
+.progress .bar-82 {
+  background-color: #f7a100;
+  background-image: none;
+}
+
+.progress .bar-78 {
+  background-color: #f57505;
+  background-image: none;
+}
+
+.progress .bar-75 {
+  background-color: #f1430f;
+  background-image: none;
+}
+
+.progress .bar-70 {
+  background-color: #ed1319;
+  background-image: none;
+}
+
+.system-step-overview .bar {
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+}
