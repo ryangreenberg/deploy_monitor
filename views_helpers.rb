@@ -44,8 +44,9 @@ module ViewsHelpers
   end
 
   def color_for_completion_rate(percentage)
+    percentage = 1.0 if percentage > 1.0
     percentages = %w|1.0 0.97 0.95 0.92 0.87 0.82 0.78 0.75 0.70|.map(&:to_f)
-    bar = percentages.detect {|ea| percentage >= ea }
+    bar = percentages.detect {|ea| percentage >= ea } || 0.70
     "bar-#{(bar * 100).to_i}"
   end
 
