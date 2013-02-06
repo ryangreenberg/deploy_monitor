@@ -21,4 +21,14 @@ describe ViewsHelpers do
       assert_equal "12.3", @instance.format_percent(0.123, 1).to_s
     end
   end
+
+  describe "#color_for_completion_rate" do
+    it "rounds to a nearby segment" do
+      assert_equal "bar-92", @instance.color_for_completion_rate(0.94)
+    end
+
+    it "uses 70 as a lower bound" do
+      assert_equal "bar-70", @instance.color_for_completion_rate(0.60)
+    end
+  end
 end
